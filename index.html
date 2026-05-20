@@ -26,11 +26,22 @@
     }
     * { box-sizing: border-box; }
     body {
-      background: var(--bg);
+      background: #e8e4de;
       color: var(--text);
       font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
       min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+    /* 모바일 앱처럼 중앙 고정 */
+    #app-wrapper {
+      width: 100%;
+      max-width: 430px;
+      background: var(--bg);
+      min-height: 100vh;
+      position: relative;
       padding-bottom: 80px;
+      box-shadow: 0 0 40px rgba(0,0,0,0.15);
     }
     /* 상단 헤더 */
     .app-header {
@@ -40,191 +51,120 @@
       position: sticky;
       top: 0;
       z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
-    .app-header h1 {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--primary);
-      margin: 0;
-      letter-spacing: -0.3px;
+    .app-header h1 { font-size: 1.15rem; font-weight: 700; color: var(--primary); margin: 0; }
+    .app-header .week-chip {
+      font-size: 0.72rem; font-weight: 600;
+      background: var(--primary-light); color: var(--primary);
+      padding: 3px 10px; border-radius: 20px;
     }
     /* 하단 탭바 */
     .bottom-nav {
       position: fixed;
-      bottom: 0; left: 0; right: 0;
+      bottom: 0;
+      width: 100%;
+      max-width: 430px;
       background: var(--card);
-      border-top: 1px solid var(--border);
+      border-top: 2px solid var(--border);
       display: flex;
       z-index: 200;
+      box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
     }
     .bottom-nav button {
-      flex: 1;
-      border: none;
-      background: none;
+      flex: 1; border: none; background: none;
       padding: 10px 0 8px;
-      font-size: 0.65rem;
-      color: var(--muted);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
-      transition: color 0.2s;
+      font-size: 0.68rem; color: var(--muted);
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      transition: color 0.2s; font-weight: 500;
     }
-    .bottom-nav button i { font-size: 1.3rem; }
-    .bottom-nav button.active { color: var(--primary); font-weight: 600; }
+    .bottom-nav button i { font-size: 1.4rem; }
+    .bottom-nav button.active {
+      color: var(--primary); font-weight: 700;
+      background: var(--primary-light);
+    }
     /* 카드 */
     .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 18px;
-      margin-bottom: 14px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 18px; margin-bottom: 14px;
     }
-    .card-label {
-      font-size: 0.7rem;
-      font-weight: 600;
-      color: var(--muted);
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
+    .card-label { font-size: 0.7rem; font-weight: 600; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 8px; }
     /* 오늘의 질문 */
     .question-card {
-      background: var(--primary);
-      color: #fff;
-      border-radius: var(--radius);
-      padding: 20px;
-      margin-bottom: 14px;
+      background: var(--primary); color: #fff;
+      border-radius: var(--radius); padding: 20px; margin-bottom: 14px;
     }
     .question-card .label { font-size: 0.7rem; opacity: 0.7; margin-bottom: 6px; }
-    .question-card .question { font-size: 1.05rem; font-weight: 600; line-height: 1.5; }
-    /* 통계 영역 */
-    .stats-row { display: flex; gap: 10px; margin-bottom: 14px; }
-    .stat-box {
-      flex: 1;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 10px;
-      text-align: center;
-    }
-    .stat-box .num { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
-    .stat-box .lbl { font-size: 0.65rem; color: var(--muted); margin-top: 2px; }
+    .question-card .question { font-size: 1rem; font-weight: 600; line-height: 1.5; }
     /* 주차 선택 */
     .week-selector {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 14px;
+      display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
     }
     .week-selector button {
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      border: 1px solid var(--border);
-      background: var(--card);
-      color: var(--primary);
-      display: flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 1px solid var(--border); background: var(--card);
+      color: var(--primary); display: flex; align-items: center; justify-content: center;
     }
-    .week-selector span {
-      flex: 1; text-align: center;
-      font-size: 0.85rem; font-weight: 600;
+    .week-selector .week-info { flex: 1; text-align: center; }
+    .week-selector .week-num { font-size: 0.95rem; font-weight: 700; color: var(--primary); }
+    .week-selector .week-date { font-size: 0.7rem; color: var(--muted); margin-top: 1px; }
+    /* 통계 */
+    .stats-row { display: flex; gap: 10px; margin-bottom: 14px; }
+    .stat-box {
+      flex: 1; background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px 10px; text-align: center;
     }
+    .stat-box .num { font-size: 1.4rem; font-weight: 700; color: var(--primary); }
+    .stat-box .lbl { font-size: 0.65rem; color: var(--muted); margin-top: 2px; }
     /* 현황 테이블 */
     .status-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
-    .status-table th {
-      color: var(--muted);
-      font-weight: 600;
-      font-size: 0.7rem;
-      padding: 8px 6px;
-      border-bottom: 1px solid var(--border);
-      text-align: center;
-    }
-    .status-table td {
-      padding: 10px 6px;
-      border-bottom: 1px solid var(--border);
-      text-align: center;
-      vertical-align: middle;
-    }
+    .status-table th { color: var(--muted); font-weight: 600; font-size: 0.7rem; padding: 8px 6px; border-bottom: 1px solid var(--border); text-align: center; }
+    .status-table td { padding: 10px 6px; border-bottom: 1px solid var(--border); text-align: center; vertical-align: middle; }
     .status-table td:first-child { text-align: left; font-weight: 500; }
     .status-table tr:last-child td { border-bottom: none; }
-    /* 뱃지 */
     .badge-done { background: var(--primary-light); color: var(--primary); padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; }
     .badge-no { background: #f5f5f5; color: #bbb; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; }
-    /* 인사이트 카드 */
-    .insight-section { margin-bottom: 12px; }
+    /* 인사이트 */
+    .insight-section { margin-bottom: 14px; }
     .insight-section .title { font-size: 0.75rem; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
     .tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
-    .tag {
-      background: var(--primary-light);
-      color: var(--primary);
-      border-radius: 20px;
-      padding: 4px 12px;
-      font-size: 0.78rem;
-      font-weight: 500;
-    }
+    .tag { background: var(--primary-light); color: var(--primary); border-radius: 20px; padding: 4px 12px; font-size: 0.78rem; font-weight: 500; }
     .tag.accent { background: var(--accent-light); color: #8a6628; }
     .flow-text { font-size: 0.88rem; color: var(--text); font-weight: 500; line-height: 1.6; }
-    /* 코칭 배너 */
-    .coaching-banner {
-      background: var(--accent-light);
-      border-left: 3px solid var(--accent);
-      border-radius: 8px;
-      padding: 12px 14px;
-      font-size: 0.88rem;
-      color: #7a5a1e;
-      line-height: 1.6;
+    .coaching-banner { background: var(--accent-light); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 14px; font-size: 0.88rem; color: #7a5a1e; line-height: 1.6; }
+    /* 멤버 배경 카드 */
+    .member-bg-card {
+      background: var(--primary-light); border-radius: 12px;
+      padding: 12px 14px; margin-bottom: 14px;
+      font-size: 0.82rem;
     }
-    /* AI 배지 */
-    .source-badge {
-      display: inline-flex; align-items: center; gap: 4px;
-      font-size: 0.65rem; padding: 2px 8px; border-radius: 20px;
-      font-weight: 600;
-    }
+    .member-bg-card .bg-row { display: flex; gap: 6px; margin-bottom: 4px; align-items: flex-start; }
+    .member-bg-card .bg-row:last-child { margin-bottom: 0; }
+    .member-bg-card .bg-label { font-size: 0.68rem; font-weight: 700; color: var(--primary); min-width: 50px; padding-top: 1px; }
+    .member-bg-card .bg-val { color: var(--text); line-height: 1.4; }
+    /* 소스 배지 */
+    .source-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 0.65rem; padding: 2px 8px; border-radius: 20px; font-weight: 600; }
     .source-badge.ai { background: #e8f0fe; color: #1a56db; }
     .source-badge.keyword { background: #f0f0f0; color: #888; }
     /* 타임라인 */
-    .timeline-item {
-      display: flex; gap: 12px; padding: 10px 0;
-      border-bottom: 1px solid var(--border);
-    }
+    .timeline-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
     .timeline-item:last-child { border-bottom: none; }
     .timeline-date { font-size: 0.72rem; color: var(--muted); min-width: 36px; padding-top: 2px; }
     .timeline-text { font-size: 0.85rem; line-height: 1.5; color: var(--text); }
     /* 폼 */
     .form-label { font-size: 0.82rem; font-weight: 600; color: var(--text); margin-bottom: 5px; }
-    .form-control, .form-select {
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      font-size: 0.88rem;
-      padding: 10px 12px;
-      background: var(--bg);
-    }
-    .form-control:focus, .form-select:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(107,124,94,0.12);
-    }
-    .btn-primary-custom {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      padding: 12px;
-      font-size: 0.92rem;
-      font-weight: 600;
-      width: 100%;
-    }
+    .form-control, .form-select { border: 1px solid var(--border); border-radius: 10px; font-size: 0.88rem; padding: 10px 12px; background: var(--bg); }
+    .form-control:focus, .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(107,124,94,0.12); }
+    .btn-primary-custom { background: var(--primary); color: #fff; border: none; border-radius: 10px; padding: 12px; font-size: 0.92rem; font-weight: 600; width: 100%; }
     .btn-primary-custom:disabled { opacity: 0.5; }
     /* 탭 */
     .inner-tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 16px; }
-    .inner-tab {
-      flex: 1; background: none; border: none;
-      padding: 10px; font-size: 0.85rem; color: var(--muted);
-      font-weight: 500; border-bottom: 2px solid transparent;
-      margin-bottom: -2px;
-    }
+    .inner-tab { flex: 1; background: none; border: none; padding: 10px; font-size: 0.85rem; color: var(--muted); font-weight: 500; border-bottom: 2px solid transparent; margin-bottom: -2px; }
     .inner-tab.active { color: var(--primary); font-weight: 700; border-bottom: 2px solid var(--primary); }
-    /* 전체 흐름 테이블 */
+    /* 전체흐름 테이블 */
     .admin-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
     .admin-table th { background: var(--primary-light); color: var(--primary); padding: 8px 6px; font-weight: 600; font-size: 0.7rem; }
     .admin-table td { padding: 9px 6px; border-bottom: 1px solid var(--border); vertical-align: middle; }
@@ -233,67 +173,64 @@
     .loading { text-align: center; padding: 32px; color: var(--muted); font-size: 0.88rem; }
     .spinner { width: 28px; height: 28px; border: 3px solid var(--border); border-top: 3px solid var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 10px; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    /* 비밀번호 화면 */
+    /* 잠금 화면 */
     .lock-screen { padding: 40px 20px; text-align: center; }
     .lock-screen i { font-size: 2.5rem; color: var(--primary); margin-bottom: 16px; }
-    /* 알림 토스트 */
-    .toast-msg {
-      position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
-      background: #333; color: #fff; padding: 10px 20px;
-      border-radius: 20px; font-size: 0.85rem; z-index: 999;
-      opacity: 0; transition: opacity 0.3s;
-      white-space: nowrap;
-    }
+    /* 토스트 */
+    .toast-msg { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 0.85rem; z-index: 999; opacity: 0; transition: opacity 0.3s; white-space: nowrap; }
     .toast-msg.show { opacity: 1; }
-    /* 화면 전환 */
+    /* 화면 */
     .screen { display: none; padding: 16px; }
     .screen.active { display: block; }
-    /* 그룹 배지 색상 */
+    /* 그룹 */
     .group-1 { background: #fde8e8; color: #c0392b; }
     .group-2 { background: #fef9e7; color: #b7770d; }
     .group-3 { background: #e8f4f8; color: #1a6fa8; }
     .group-4 { background: #e8f5e9; color: #2e7d32; }
     .group-5 { background: #f3e5f5; color: #6a1b9a; }
+    /* 빈 상태 */
+    .empty-state { text-align: center; padding: 30px 20px; color: var(--muted); font-size: 0.85rem; }
+    .empty-state i { font-size: 2rem; display: block; margin-bottom: 8px; }
   </style>
 </head>
 <body>
+<div id="app-wrapper">
 
 <!-- 상단 헤더 -->
-<div class="app-header d-flex align-items-center justify-content-between">
+<div class="app-header">
   <h1>🌱 자존주니</h1>
-  <span id="headerWeekLabel" style="font-size:0.75rem;color:var(--muted);"></span>
+  <span class="week-chip" id="headerWeekChip"></span>
 </div>
 
-<!-- 화면 1: 홈 -->
+<!-- 홈 화면 -->
 <div id="screen-home" class="screen active">
-  <!-- 오늘의 질문 -->
   <div class="question-card">
     <div class="label">오늘의 알아차림 질문</div>
     <div class="question" id="todayQuestion">불러오는 중...</div>
   </div>
 
-  <!-- 주차 선택 -->
   <div class="week-selector">
     <button onclick="changeWeek(-1)"><i class="bi bi-chevron-left"></i></button>
-    <span id="weekLabel">이번 주</span>
+    <div class="week-info">
+      <div class="week-num" id="weekNumLabel"></div>
+      <div class="week-date" id="weekDateLabel"></div>
+    </div>
     <button onclick="changeWeek(1)"><i class="bi bi-chevron-right"></i></button>
   </div>
 
-  <!-- 통계 -->
   <div class="stats-row" id="statsArea">
-    <div class="stat-box"><div class="num">-</div><div class="lbl">평균 기록</div></div>
-    <div class="stat-box"><div class="num">-</div><div class="lbl">최고 기록</div></div>
+    <div class="stat-box"><div class="num">-</div><div class="lbl">평균 인증 횟수</div></div>
+    <div class="stat-box"><div class="num">-</div><div class="lbl">최고 인증 횟수</div></div>
     <div class="stat-box"><div class="num">-</div><div class="lbl">오늘 인증</div></div>
   </div>
 
-  <!-- 멤버 현황 -->
   <div class="card" style="padding:14px;">
     <div class="card-label">멤버 현황</div>
     <div id="memberStatusArea"><div class="loading"><div class="spinner"></div>불러오는 중...</div></div>
   </div>
 </div>
 
-<!-- 화면 2: 내 성장 -->
+<!-- 내 성장 화면 -->
 <div id="screen-growth" class="screen">
   <div class="card">
     <div class="card-label">멤버 선택</div>
@@ -301,12 +238,21 @@
       <option value="">-- 멤버를 선택하세요 --</option>
     </select>
   </div>
+
+  <div class="week-selector">
+    <button onclick="changeWeek(-1)"><i class="bi bi-chevron-left"></i></button>
+    <div class="week-info">
+      <div class="week-num" id="growthWeekNumLabel"></div>
+      <div class="week-date" id="growthWeekDateLabel"></div>
+    </div>
+    <button onclick="changeWeek(1)"><i class="bi bi-chevron-right"></i></button>
+  </div>
+
   <div id="growthResult"></div>
 </div>
 
-<!-- 화면 3: 운영자 -->
+<!-- 운영자 화면 -->
 <div id="screen-admin" class="screen">
-  <!-- 비밀번호 화면 -->
   <div id="adminLock">
     <div class="lock-screen">
       <i class="bi bi-lock-fill"></i>
@@ -317,15 +263,13 @@
     </div>
   </div>
 
-  <!-- 운영자 대시보드 -->
   <div id="adminDashboard" style="display:none;">
-    <!-- 탭 -->
     <div class="inner-tabs">
       <button class="inner-tab active" id="tab-input" onclick="switchAdminTab('input')">📝 데이터 입력</button>
       <button class="inner-tab" id="tab-analysis" onclick="switchAdminTab('analysis')">📊 전체 흐름 분석</button>
     </div>
 
-    <!-- 탭1: 데이터 입력 -->
+    <!-- 데이터 입력 탭 -->
     <div id="adminTabInput">
       <div class="card">
         <div class="mb-3">
@@ -351,8 +295,16 @@
       </div>
     </div>
 
-    <!-- 탭2: 전체 흐름 분석 -->
+    <!-- 전체 흐름 분석 탭 -->
     <div id="adminTabAnalysis" style="display:none;">
+      <div class="week-selector">
+        <button onclick="changeWeek(-1)"><i class="bi bi-chevron-left"></i></button>
+        <div class="week-info">
+          <div class="week-num" id="adminWeekNumLabel"></div>
+          <div class="week-date" id="adminWeekDateLabel"></div>
+        </div>
+        <button onclick="changeWeek(1)"><i class="bi bi-chevron-right"></i></button>
+      </div>
       <div class="card">
         <div class="card-label mb-2">전체 멤버 흐름 분석</div>
         <div id="adminAnalysisArea"><div class="loading"><div class="spinner"></div>분석 중...</div></div>
@@ -367,25 +319,29 @@
     <i class="bi bi-house-fill"></i>홈
   </button>
   <button id="navGrowth" onclick="switchScreen('growth')">
-    <i class="bi bi-graph-up"></i>내 성장
+    <i class="bi bi-graph-up-arrow"></i>내 성장
   </button>
   <button id="navAdmin" onclick="switchScreen('admin')">
     <i class="bi bi-person-gear"></i>운영자
   </button>
 </nav>
 
-<!-- 토스트 메시지 -->
 <div class="toast-msg" id="toastMsg"></div>
+</div><!-- /app-wrapper -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 <script>
 // =============================================
-// ⚙️ 설정: GAS 웹앱 URL을 여기에 붙여넣으세요
+// ⚙️ GAS 웹앱 URL
 // =============================================
-const GAS_URL = "https://script.google.com/macros/s/AKfycbwzjdWSYJ08VE55ba3PgLxo_KtJ9Qg8Kz0tW3UqiVnxot7zAn2IIG_eauWa4VlNsoCs-Q/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwEUqvNyPW_ST9e4FadkuPDqh9f0DfMySeG_zeoLBomq4OoBuC7G7AtGRHS3M4_bcfU_w/exec";
+
+// 1주차 시작일 (월요일 기준)
+const FIRST_WEEK_MONDAY = new Date('2025-04-20');
+FIRST_WEEK_MONDAY.setHours(0,0,0,0);
 
 // =============================================
-// 상태 변수
+// 상태
 // =============================================
 let currentWeekMonday = getThisMonday();
 let membersCache = [];
@@ -393,7 +349,7 @@ let adminLoggedIn = false;
 let currentAdminTab = "input";
 
 // =============================================
-// GAS API 호출 헬퍼
+// GAS 통신
 // =============================================
 async function gasGet(params) {
   const url = GAS_URL + "?" + new URLSearchParams(params).toString();
@@ -405,8 +361,7 @@ async function gasGet(params) {
 
 async function gasPost(body) {
   const res = await fetch(GAS_URL, {
-    method: "POST",
-    redirect: "follow",
+    method: "POST", redirect: "follow",
     headers: { "Content-Type": "text/plain;charset=utf-8" },
     body: JSON.stringify(body)
   });
@@ -416,7 +371,7 @@ async function gasPost(body) {
 }
 
 // =============================================
-// 날짜 유틸 (KST 기준)
+// 날짜 / 주차 유틸
 // =============================================
 function getThisMonday() {
   const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
@@ -424,20 +379,28 @@ function getThisMonday() {
   const diff = day === 0 ? -6 : 1 - day;
   const monday = new Date(now);
   monday.setDate(now.getDate() + diff);
-  monday.setHours(0, 0, 0, 0);
+  monday.setHours(0,0,0,0);
   return monday;
 }
 
 function toDateStr(d) {
-  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
 }
 
-function weekLabel(monday) {
+function getWeekNumber(monday) {
+  const diff = monday - FIRST_WEEK_MONDAY;
+  const n = Math.floor(diff / (7 * 24 * 60 * 60 * 1000)) + 1;
+  return n > 0 ? n : 1;
+}
+
+function weekNumText(monday) {
+  return getWeekNumber(monday) + "주차";
+}
+
+function weekDateText(monday) {
   const end = new Date(monday);
   end.setDate(monday.getDate() + 6);
-  const m1 = monday.getMonth() + 1, d1 = monday.getDate();
-  const m2 = end.getMonth() + 1, d2 = end.getDate();
-  return `${m1}/${d1} ~ ${m2}/${d2}`;
+  return (monday.getMonth()+1) + "/" + monday.getDate() + " ~ " + (end.getMonth()+1) + "/" + end.getDate();
 }
 
 function todayStr() {
@@ -446,15 +409,36 @@ function todayStr() {
 }
 
 function changeWeek(dir) {
+  currentWeekMonday = new Date(currentWeekMonday);
   currentWeekMonday.setDate(currentWeekMonday.getDate() + dir * 7);
   updateWeekUI();
-  loadHomeData();
+  // 현재 활성 화면에 따라 리로드
+  const active = document.querySelector('.screen.active').id;
+  if (active === 'screen-home') loadHomeData();
+  if (active === 'screen-growth' && document.getElementById('growthMemberSelect').value) loadGrowthInsight();
+  if (active === 'screen-admin' && currentAdminTab === 'analysis') loadAdminAnalysis();
 }
 
 function updateWeekUI() {
-  const label = weekLabel(currentWeekMonday);
-  document.getElementById("weekLabel").textContent = label;
-  document.getElementById("headerWeekLabel").textContent = label;
+  const num = weekNumText(currentWeekMonday);
+  const date = weekDateText(currentWeekMonday);
+  // 헤더
+  document.getElementById("headerWeekChip").textContent = num;
+  // 홈
+  const wn = document.getElementById("weekNumLabel");
+  const wd = document.getElementById("weekDateLabel");
+  if (wn) wn.textContent = num;
+  if (wd) wd.textContent = date;
+  // 내 성장
+  const gn = document.getElementById("growthWeekNumLabel");
+  const gd = document.getElementById("growthWeekDateLabel");
+  if (gn) gn.textContent = num;
+  if (gd) gd.textContent = date;
+  // 운영자
+  const an = document.getElementById("adminWeekNumLabel");
+  const ad = document.getElementById("adminWeekDateLabel");
+  if (an) an.textContent = num;
+  if (ad) ad.textContent = date;
 }
 
 // =============================================
@@ -465,7 +449,6 @@ function switchScreen(name) {
   document.getElementById("screen-" + name).classList.add("active");
   document.querySelectorAll(".bottom-nav button").forEach(b => b.classList.remove("active"));
   document.getElementById("nav" + name.charAt(0).toUpperCase() + name.slice(1)).classList.add("active");
-
   if (name === "growth") loadGrowthMemberList();
   if (name === "admin" && adminLoggedIn && currentAdminTab === "analysis") loadAdminAnalysis();
 }
@@ -475,34 +458,31 @@ function switchScreen(name) {
 // =============================================
 async function loadHomeData() {
   document.getElementById("memberStatusArea").innerHTML = '<div class="loading"><div class="spinner"></div>불러오는 중...</div>';
-
   try {
     const [qRes, statusRes] = await Promise.all([
       gasGet({ action: "getTodayQuestion" }),
       gasGet({ action: "getFullStatus", week: toDateStr(currentWeekMonday) })
     ]);
-
     document.getElementById("todayQuestion").textContent = qRes.question || "질문을 불러올 수 없습니다.";
     renderStats(statusRes.stats);
     renderMemberTable(statusRes.list);
-  } catch (e) {
+  } catch(e) {
     document.getElementById("memberStatusArea").innerHTML = '<div style="color:var(--danger);text-align:center;padding:20px;">데이터를 불러오지 못했습니다.<br><small>' + e.message + '</small></div>';
   }
 }
 
 function renderStats(stats) {
   if (!stats) return;
-  const area = document.getElementById("statsArea");
-  area.innerHTML = `
-    <div class="stat-box"><div class="num">${stats.avg}</div><div class="lbl">평균 기록</div></div>
-    <div class="stat-box"><div class="num">${stats.max}</div><div class="lbl">최고 기록</div></div>
+  document.getElementById("statsArea").innerHTML = `
+    <div class="stat-box"><div class="num">${stats.avg}회</div><div class="lbl">평균 인증 횟수</div></div>
+    <div class="stat-box"><div class="num">${stats.max}회</div><div class="lbl">최고 인증 횟수</div></div>
     <div class="stat-box"><div class="num">${stats.todayCount}명</div><div class="lbl">오늘 인증</div></div>
   `;
 }
 
 function renderMemberTable(list) {
   if (!list || list.length === 0) {
-    document.getElementById("memberStatusArea").innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px;">멤버 데이터가 없습니다.</div>';
+    document.getElementById("memberStatusArea").innerHTML = '<div class="empty-state"><i class="bi bi-people"></i>멤버 데이터가 없습니다.</div>';
     return;
   }
   const rows = list.map(m => `
@@ -515,7 +495,7 @@ function renderMemberTable(list) {
   `).join("");
   document.getElementById("memberStatusArea").innerHTML = `
     <table class="status-table">
-      <thead><tr><th>닉네임</th><th>기록</th><th>글쓰기</th><th>오늘</th></tr></thead>
+      <thead><tr><th>닉네임</th><th>인증</th><th>주간 글쓰기</th><th>오늘</th></tr></thead>
       <tbody>${rows}</tbody>
     </table>
   `;
@@ -525,41 +505,45 @@ function renderMemberTable(list) {
 // 내 성장 화면
 // =============================================
 async function loadGrowthMemberList() {
-  if (membersCache.length > 0) {
-    fillMemberSelect("growthMemberSelect");
-    return;
-  }
+  if (membersCache.length > 0) { fillMemberSelect("growthMemberSelect"); return; }
   try {
     membersCache = await gasGet({ action: "getMembers" });
     fillMemberSelect("growthMemberSelect");
-  } catch (e) { showToast("멤버 목록을 불러오지 못했습니다."); }
+  } catch(e) { showToast("멤버 목록을 불러오지 못했습니다."); }
 }
 
 function fillMemberSelect(selectId) {
   const sel = document.getElementById(selectId);
-  const current = sel.value;
+  const cur = sel.value;
   sel.innerHTML = '<option value="">-- 멤버를 선택하세요 --</option>';
   membersCache.forEach(m => {
     const opt = document.createElement("option");
-    opt.value = m.id;
-    opt.textContent = m.name;
+    opt.value = m.id; opt.textContent = m.name;
     sel.appendChild(opt);
   });
-  if (current) sel.value = current;
+  if (cur) sel.value = cur;
 }
 
 async function loadGrowthInsight() {
   const name = document.getElementById("growthMemberSelect").value;
   if (!name) { document.getElementById("growthResult").innerHTML = ""; return; }
-
   document.getElementById("growthResult").innerHTML = '<div class="loading"><div class="spinner"></div>분석 중...</div>';
-
   try {
     const data = await gasGet({ action: "getMemberInsight", name, week: toDateStr(currentWeekMonday) });
     renderInsight(data, "growthResult");
-  } catch (e) {
+  } catch(e) {
     document.getElementById("growthResult").innerHTML = '<div style="color:var(--danger);padding:16px;">분석 중 오류가 발생했습니다.</div>';
   }
+}
+
+function groupClass(group) {
+  if (!group) return "";
+  if (group.startsWith("①")) return "group-1";
+  if (group.startsWith("②")) return "group-2";
+  if (group.startsWith("③")) return "group-3";
+  if (group.startsWith("④")) return "group-4";
+  if (group.startsWith("⑤")) return "group-5";
+  return "";
 }
 
 function renderInsight(data, containerId) {
@@ -571,9 +555,15 @@ function renderInsight(data, containerId) {
     ? '<span class="source-badge keyword"><i class="bi bi-search"></i> 키워드 분석</span>'
     : '';
 
-  const groupClass = data.group
-    ? "group-" + (data.group.charAt(0) === "①" ? 1 : data.group.charAt(0) === "②" ? 2 : data.group.charAt(0) === "③" ? 3 : data.group.charAt(0) === "④" ? 4 : 5)
-    : "";
+  // 멤버 배경 (신청이유, 현재상태, 목표)
+  let bgHtml = "";
+  if (data.background && (data.background.reason || data.background.status || data.background.goal)) {
+    bgHtml = `<div class="member-bg-card">
+      ${data.background.reason ? `<div class="bg-row"><span class="bg-label">신청 이유</span><span class="bg-val">${data.background.reason}</span></div>` : ""}
+      ${data.background.status ? `<div class="bg-row"><span class="bg-label">현재 상태</span><span class="bg-val">${data.background.status}</span></div>` : ""}
+      ${data.background.goal ? `<div class="bg-row"><span class="bg-label">바라는 모습</span><span class="bg-val">${data.background.goal}</span></div>` : ""}
+    </div>`;
+  }
 
   const statesHtml = (Array.isArray(data.states) ? data.states : [data.states]).map(s => `<span class="tag">${s}</span>`).join("");
   const stopsHtml = (Array.isArray(data.stops) ? data.stops : [data.stops]).map(s => `<span class="tag">${s}</span>`).join("");
@@ -586,23 +576,24 @@ function renderInsight(data, containerId) {
       <div class="timeline-date">${t.date}</div>
       <div class="timeline-text">${t.text}</div>
     </div>
-  `).join("") || '<div style="color:var(--muted);font-size:0.85rem;">기록이 없습니다.</div>';
+  `).join("") || '<div class="empty-state"><i class="bi bi-journal"></i>기록이 없습니다.</div>';
 
   const coachingHtml = data.coaching
-    ? `<div class="coaching-banner"><i class="bi bi-chat-heart" style="margin-right:6px;"></i>${data.coaching}</div>`
+    ? `<div class="coaching-banner mt-3"><i class="bi bi-chat-heart" style="margin-right:6px;"></i>${data.coaching}</div>`
     : "";
 
   document.getElementById(containerId).innerHTML = `
     <div class="card">
-      <div class="d-flex align-items-center justify-content-between mb-3">
+      <div class="d-flex align-items-center justify-content-between mb-2">
         <div style="font-weight:700;font-size:1rem;">${data.name}</div>
         ${sourceBadge}
       </div>
+      ${data.group ? `<div class="mb-3"><span class="tag ${groupClass(data.group)}" style="border-radius:8px;padding:4px 12px;">${data.group}</span></div>` : ""}
 
-      ${data.group ? `<div class="mb-3"><span class="tag ${groupClass}" style="border-radius:8px;padding:4px 12px;">${data.group}</span></div>` : ""}
+      ${bgHtml}
 
       <div class="insight-section">
-        <div class="title">🪞 현재 상태</div>
+        <div class="title">🪞 자주 느낀 상태</div>
         <div class="tag-row">${statesHtml}</div>
       </div>
       <div class="insight-section">
@@ -610,14 +601,13 @@ function renderInsight(data, containerId) {
         <div class="tag-row">${stopsHtml}</div>
       </div>
       <div class="insight-section">
-        <div class="title">🔁 패턴</div>
+        <div class="title">🔁 알아차린 패턴</div>
         <div class="tag-row">${patternsHtml}</div>
       </div>
       <div class="insight-section">
         <div class="title">🌊 이번 주 흐름</div>
         <div class="flow-text">${data.flow || "-"}</div>
       </div>
-
       ${coachingHtml}
     </div>
 
@@ -640,29 +630,22 @@ async function doAdminLogin() {
       document.getElementById("adminLock").style.display = "none";
       document.getElementById("adminDashboard").style.display = "block";
       await loadAdminMemberList();
-      setTodayDate();
+      document.getElementById("inputDate").value = todayStr();
     } else {
       document.getElementById("adminPwError").textContent = "비밀번호가 올바르지 않습니다.";
     }
-  } catch (e) {
-    document.getElementById("adminPwError").textContent = "오류가 발생했습니다: " + e.message;
+  } catch(e) {
+    document.getElementById("adminPwError").textContent = "오류: " + e.message;
   }
-}
-
-function setTodayDate() {
-  document.getElementById("inputDate").value = todayStr();
 }
 
 async function loadAdminMemberList() {
-  if (membersCache.length === 0) {
-    membersCache = await gasGet({ action: "getMembers" });
-  }
+  if (membersCache.length === 0) membersCache = await gasGet({ action: "getMembers" });
   const sel = document.getElementById("inputMember");
   sel.innerHTML = '<option value="">-- 멤버 선택 --</option>';
   membersCache.forEach(m => {
     const opt = document.createElement("option");
-    opt.value = m.id;
-    opt.textContent = m.name;
+    opt.value = m.id; opt.textContent = m.name;
     sel.appendChild(opt);
   });
 }
@@ -674,13 +657,9 @@ async function doSaveAuth() {
     selfRespect: document.getElementById("inputSelfRespect").value,
     weeklyWriting: document.getElementById("inputWeeklyWriting").value
   };
-
   const btn = document.getElementById("saveBtn");
   const result = document.getElementById("saveResult");
-
-  btn.disabled = true;
-  btn.textContent = "저장 중...";
-
+  btn.disabled = true; btn.textContent = "저장 중...";
   try {
     const res = await gasPost({ action: "saveAuth", formData });
     result.textContent = res.message;
@@ -690,12 +669,11 @@ async function doSaveAuth() {
       document.getElementById("inputWeeklyWriting").value = "";
       document.getElementById("inputMember").value = "";
     }
-  } catch (e) {
+  } catch(e) {
     result.textContent = "❌ 저장 실패: " + e.message;
     result.style.color = "var(--danger)";
   } finally {
-    btn.disabled = false;
-    btn.textContent = "저장하기";
+    btn.disabled = false; btn.textContent = "저장하기";
   }
 }
 
@@ -709,39 +687,35 @@ function switchAdminTab(tab) {
 }
 
 async function loadAdminAnalysis() {
-  document.getElementById("adminAnalysisArea").innerHTML = '<div class="loading"><div class="spinner"></div>전체 분석 중...<br><small style="color:var(--muted);">AI 분석 시 시간이 걸릴 수 있습니다</small></div>';
+  document.getElementById("adminAnalysisArea").innerHTML = '<div class="loading"><div class="spinner"></div>전체 분석 중...<br><small>AI 분석 시 시간이 걸릴 수 있습니다</small></div>';
   try {
     const data = await gasGet({ action: "getAllAdminAnalysis", week: toDateStr(currentWeekMonday) });
     renderAdminAnalysis(data);
-  } catch (e) {
+  } catch(e) {
     document.getElementById("adminAnalysisArea").innerHTML = '<div style="color:var(--danger);padding:16px;">분석 실패: ' + e.message + '</div>';
   }
 }
 
 function renderAdminAnalysis(dataArr) {
   if (!dataArr || dataArr.length === 0) {
-    document.getElementById("adminAnalysisArea").innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px;">데이터가 없습니다.</div>';
+    document.getElementById("adminAnalysisArea").innerHTML = '<div class="empty-state"><i class="bi bi-people"></i>데이터가 없습니다.</div>';
     return;
   }
-
   const rows = dataArr.map(d => {
-    const states = Array.isArray(d.states) ? d.states.join(", ") : (d.states || "-");
-    const groupClass = d.group
-      ? "group-" + (d.group.charAt(0) === "①" ? 1 : d.group.charAt(0) === "②" ? 2 : d.group.charAt(0) === "③" ? 3 : d.group.charAt(0) === "④" ? 4 : 5)
-      : "";
-    const sourceBadge = d.source === "ai"
+    const states = Array.isArray(d.states) ? d.states.filter(s => s !== "기록 없음").join(", ") || "-" : (d.states || "-");
+    const gc = groupClass(d.group);
+    const src = d.source === "ai"
       ? '<span class="source-badge ai" style="font-size:0.6rem;">AI</span>'
       : '<span class="source-badge keyword" style="font-size:0.6rem;">KW</span>';
     return `
       <tr>
-        <td style="font-weight:600;">${d.name} ${sourceBadge}</td>
-        <td>${d.group ? `<span class="tag ${groupClass}" style="font-size:0.7rem;padding:2px 8px;">${d.group}</span>` : "-"}</td>
-        <td style="max-width:120px;">${states}</td>
-        <td style="max-width:100px;font-size:0.75rem;">${d.flow || "-"}</td>
+        <td style="font-weight:600;">${d.name} ${src}</td>
+        <td>${d.group ? `<span class="tag ${gc}" style="font-size:0.68rem;padding:2px 7px;border-radius:6px;">${d.group}</span>` : "-"}</td>
+        <td style="max-width:100px;font-size:0.75rem;">${states}</td>
+        <td style="max-width:90px;font-size:0.72rem;color:var(--muted);">${d.flow || "-"}</td>
       </tr>
     `;
   }).join("");
-
   document.getElementById("adminAnalysisArea").innerHTML = `
     <div style="overflow-x:auto;">
       <table class="admin-table">
@@ -753,12 +727,11 @@ function renderAdminAnalysis(dataArr) {
 }
 
 // =============================================
-// 토스트 메시지
+// 토스트
 // =============================================
 function showToast(msg) {
   const el = document.getElementById("toastMsg");
-  el.textContent = msg;
-  el.classList.add("show");
+  el.textContent = msg; el.classList.add("show");
   setTimeout(() => el.classList.remove("show"), 2500);
 }
 
