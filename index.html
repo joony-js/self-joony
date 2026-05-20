@@ -397,18 +397,20 @@ let currentAdminTab = "input";
 // =============================================
 async function gasGet(params) {
   const url = GAS_URL + "?" + new URLSearchParams(params).toString();
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("서버 오류: " + res.status);
-  return res.json();
+  const res = await fetch(url, { redirect: 'follow' });
+  const text = await res.text();
+  return JSON.parse(text);
 }
 
 async function gasPost(body) {
   const res = await fetch(GAS_URL, {
     method: "POST",
-    body: JSON.stringify(body)
+    headers: { "Content-Type": "text/plain" },
+    body: JSON.stringify(body),
+    redirect: 'follow'
   });
-  if (!res.ok) throw new Error("서버 오류: " + res.status);
-  return res.json();
+  const text = await res.text();
+  return JSON.parse(text);
 }
 
 // =============================================
