@@ -198,7 +198,10 @@
           <button id="adminWkNext" onclick="changeWeek(1)"><i class="bi bi-chevron-right"></i></button>
         </div>
         <div class="card" style="padding:14px;">
-          <div class="card-label mb-2">전체 흐름 — 멤버를 눌러 상세 보기</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <div class="card-label" style="margin-bottom:0;">전체 흐름 — 멤버를 눌러 상세 보기</div>
+            <button onclick="clearAllCache()" style="background:none;border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:0.72rem;color:var(--muted);cursor:pointer;" title="캐시 초기화 후 재분석">🔄 재분석</button>
+          </div>
           <div id="adminAnalysisArea"><div class="loading"><div class="spinner"></div>불러오는 중...</div></div>
         </div>
       </div>
@@ -220,7 +223,7 @@
 </div>
 
 <script>
-const GAS_URL = "https://script.google.com/macros/s/AKfycby4DXoLY4L3Q4bl1cTL5IrIQzxmmiM-ShgP1KuiNv7rGyb-avTdpR-2BK9gDuwqWmBZ_Q/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbznL5Ye57L5FqQR1eXye1Qy8SgOTjuxoHqFip8bbViXm7Z7LSHxRPnsYZ6rUadm1i-NGQ/exec";
 
 const PROGRAM_START = new Date(new Date().getFullYear(), 3, 20); // 4월 20일 현재연도
 const MAX_WEEKS = 8;
@@ -231,8 +234,16 @@ let adminLoggedIn = false;
 let currentAdminTab = "input";
 let adminAnalysisData = []; // 전체 분석 결과 캐시
 
-// 브라우저 메모리 캐시 (세션 동안 유지)
-const insightMemCache = {};
+// localStorage 캐시 (페이지 새로고침해도 유지)
+const CACHE_PREFIX = 'zj_insight_';
+function getLocalCache(key) {
+  try { const d = localStorage.getItem(CACHE_PREFIX + key); return d ? JSON.parse(d) : null; }
+  catch(e) { return null; }
+}
+function setLocalCache(key, data) {
+  try { localStorage.setItem(CACHE_PREFIX + key, JSON.stringify(data)); }
+  catch(e) {}
+}
 
 // =============================================
 // 주차
@@ -259,6 +270,14 @@ function weekDateText(w) {
   const e = new Date(s); e.setDate(s.getDate() + 6);
   return (s.getMonth()+1) + "/" + s.getDate() + " ~ " + (e.getMonth()+1) + "/" + e.getDate();
 }
+function getWeekNumFromDate(dateStr) {
+  const d = new Date(dateStr);
+  const diff = d - PROGRAM_START;
+  if (diff < 0) return 1;
+  const w = Math.floor(diff / (7 * 24 * 60 * 60 * 1000)) + 1;
+  return Math.min(Math.max(w, 1), MAX_WEEKS);
+}
+
 function todayStr() {
   const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
   return now.getFullYear() + "-" + String(now.getMonth()+1).padStart(2,"0") + "-" + String(now.getDate()).padStart(2,"0");
@@ -365,13 +384,14 @@ function fillSelect(id) {
 async function loadGrowthInsight() {
   const name = document.getElementById("growthMemberSelect").value;
   if (!name) { document.getElementById("growthResult").innerHTML = ""; return; }
-  const memKey = name + "_" + currentWeek;
-  // 브라우저 메모리 캐시 확인 → 즉시 렌더링
-  if (insightMemCache[memKey]) { renderInsight(insightMemCache[memKey], "growthResult"); return; }
+  const cacheKey = name + "_" + currentWeek;
+  // localStorage 캐시 확인 → 즉시 렌더링 (로딩 없음)
+  const cached = getLocalCache(cacheKey);
+  if (cached) { renderInsight(cached, "growthResult"); return; }
   document.getElementById("growthResult").innerHTML = '<div class="loading"><div class="spinner"></div>기록을 읽고 있어요...</div>';
   try {
     const data = await gasGet({ action: "getMemberInsight", name, week: weekMondayStr(currentWeek) });
-    insightMemCache[memKey] = data;
+    setLocalCache(cacheKey, data);
     renderInsight(data, "growthResult");
   } catch(e) {
     document.getElementById("growthResult").innerHTML = '<div style="color:var(--danger);padding:16px;">오류: ' + e.message + '</div>';
@@ -499,7 +519,16 @@ async function doSaveAuth() {
     const res = await gasPost({ action: "saveAuth", formData });
     result.textContent = res.message;
     result.style.color = res.message.startsWith("✅") ? "var(--success)" : "var(--danger)";
-    if (res.message.startsWith("✅")) { document.getElementById("inputSelfRespect").value = ""; document.getElementById("inputWeeklyWriting").value = ""; document.getElementById("inputMember").value = ""; }
+    if (res.message.startsWith("✅")) {
+      // 해당 멤버+주차 localStorage 캐시 삭제 → 다음 분석 시 최신 데이터 반영
+      const savedWeek = getWeekNumFromDate(formData.date);
+      localStorage.removeItem(CACHE_PREFIX + formData.memberId + "_" + savedWeek);
+      localStorage.removeItem(CACHE_PREFIX + "admin_all_" + savedWeek);
+      adminAnalysisData = []; // 운영자 메모리 캐시도 초기화
+      document.getElementById("inputSelfRespect").value = "";
+      document.getElementById("inputWeeklyWriting").value = "";
+      document.getElementById("inputMember").value = "";
+    }
   } catch(e) { result.textContent = "❌ 저장 실패: " + e.message; result.style.color = "var(--danger)"; }
   finally { btn.disabled = false; btn.textContent = "저장하기"; }
 }
@@ -513,10 +542,15 @@ function switchAdminTab(tab) {
 }
 async function loadAdminAnalysis() {
   if (adminAnalysisData.length > 0) { renderAdminTable(adminAnalysisData); return; }
-  document.getElementById("adminAnalysisArea").innerHTML = '<div class="loading"><div class="spinner"></div>흐름 불러오는 중...<br><small style="color:var(--muted);">캐시가 있으면 빠르게 표시됩니다</small></div>';
+  // localStorage에서 전체 분석 캐시 확인
+  const adminCacheKey = "admin_all_" + currentWeek;
+  const adminCached = getLocalCache(adminCacheKey);
+  if (adminCached) { adminAnalysisData = adminCached; renderAdminTable(adminCached); return; }
+  document.getElementById("adminAnalysisArea").innerHTML = '<div class="loading"><div class="spinner"></div>흐름 불러오는 중...</div>';
   try {
     const data = await gasGet({ action: "getAllAdminAnalysis", week: weekMondayStr(currentWeek) });
     adminAnalysisData = data;
+    setLocalCache(adminCacheKey, data);
     renderAdminTable(data);
   } catch(e) {
     document.getElementById("adminAnalysisArea").innerHTML = '<div style="color:var(--danger);padding:12px;">오류: ' + e.message + '</div>';
@@ -550,12 +584,16 @@ async function showAdminDetail(idx) {
   if (!d) return;
   document.getElementById("adminListView").style.display = "none";
   document.getElementById("adminDetailView").style.display = "block";
+  // localStorage 캐시 확인 → 즉시 표시
+  const cacheKey = d.name + "_" + currentWeek;
+  const cached = getLocalCache(cacheKey);
+  const detail = cached || d;
   // 운영 메모 로드
   try {
     const noteRes = await gasGet({ action: "getAdminNote", name: d.name });
-    d.admin_note = noteRes.note || "";
-  } catch(e) { d.admin_note = ""; }
-  renderInsight(d, "adminDetailContent", true);
+    detail.admin_note = noteRes.note || "";
+  } catch(e) { detail.admin_note = ""; }
+  renderInsight(detail, "adminDetailContent", true);
 }
 function showAdminList() {
   document.getElementById("adminDetailView").style.display = "none";
@@ -571,8 +609,25 @@ async function saveAdminNote(name) {
   } catch(e) { resultEl.textContent = "오류"; resultEl.style.color = "var(--danger)"; }
 }
 
+async function clearAllCache() {
+  if (!confirm("캐시를 초기화하면 전체 멤버를 다시 분석해요.\n계속할까요?")) return;
+  try {
+    // GAS 캐시 시트 초기화
+    await gasGet({ action: "clearCache" });
+    // localStorage 캐시 초기화
+    Object.keys(localStorage).forEach(k => {
+      if (k.startsWith('zj_insight_')) localStorage.removeItem(k);
+    });
+    adminAnalysisData = [];
+    showToast("✅ 캐시 초기화 완료! 다시 분석합니다.");
+    await loadAdminAnalysis();
+  } catch(e) {
+    showToast("❌ 초기화 오류: " + e.message);
+  }
+}
+
 function showToast(msg) {
-  const el = document.getElementById("toastMsg");D
+  const el = document.getElementById("toastMsg");
   el.textContent = msg; el.classList.add("show");
   setTimeout(() => el.classList.remove("show"), 2500);
 }
