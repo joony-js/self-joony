@@ -309,10 +309,10 @@
 </div>
 
 <script>
-const GAS_URL = "https://script.google.com/macros/s/AKfycbwDYUHJOmBBR0bU3oUqa4XATjHJ8XhbvgwBZBdVP5ouM8uJdQAKQzEdIPlw_wBDqIc-QA/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbz9s3UCpac9cKuxTWObkyxh0g5F7YVcT3O3kg-GFfYebIx8nNPVLkWXpY_znu1sune5dA/exec";
 
 // 프로그램 주차 설정 (1주차~8주차 고정)
-const PROGRAM_START = new Date(2025, 3, 20); // 4월 20일
+const PROGRAM_START = new Date(new Date().getFullYear(), 3, 20); // 4월 20일 (현재 연도 자동)
 const MAX_WEEKS = 8;
 
 let currentWeek = getDefaultWeek(); // 1~8
@@ -326,6 +326,7 @@ let currentAdminTab = "input";
 function getDefaultWeek() {
   const now = new Date();
   const diff = now - PROGRAM_START;
+  if (diff < 0) return 1;
   const w = Math.floor(diff / (7 * 24 * 60 * 60 * 1000)) + 1;
   return Math.min(Math.max(w, 1), MAX_WEEKS);
 }
