@@ -9,89 +9,35 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
   <style>
     :root {
-      --bg: #f7f5f2;
-      --card: #ffffff;
-      --primary: #6b7c5e;
-      --primary-light: #eef1ea;
-      --accent: #c9a96e;
-      --accent-light: #fdf6ec;
-      --text: #2d2d2d;
-      --muted: #999;
-      --border: #e8e4de;
-      --danger: #c0392b;
-      --success: #4a7c59;
-      --radius: 16px;
+      --bg: #f7f5f2; --card: #ffffff; --primary: #6b7c5e; --primary-light: #eef1ea;
+      --accent: #c9a96e; --accent-light: #fdf6ec; --text: #2d2d2d; --muted: #999;
+      --border: #e8e4de; --danger: #c0392b; --success: #4a7c59; --radius: 16px;
     }
     * { box-sizing: border-box; }
-    body {
-      background: #ddd9d3;
-      color: var(--text);
-      font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-    }
-    #app-wrapper {
-      width: 100%;
-      max-width: 430px;
-      background: var(--bg);
-      min-height: 100vh;
-      position: relative;
-      padding-bottom: 80px;
-      box-shadow: 0 0 40px rgba(0,0,0,0.12);
-    }
-    /* 헤더 */
-    .app-header {
-      background: var(--card);
-      border-bottom: 1px solid var(--border);
-      padding: 14px 20px;
-      position: sticky; top: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-    }
+    body { background: #ddd9d3; color: var(--text); font-family: 'Apple SD Gothic Neo','Noto Sans KR',sans-serif; min-height: 100vh; display: flex; justify-content: center; }
+    #app-wrapper { width: 100%; max-width: 430px; background: var(--bg); min-height: 100vh; position: relative; padding-bottom: 80px; box-shadow: 0 0 40px rgba(0,0,0,0.12); }
+    .app-header { background: var(--card); border-bottom: 1px solid var(--border); padding: 14px 20px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; }
     .app-header h1 { font-size: 1.1rem; font-weight: 700; color: var(--primary); margin: 0; }
     .week-chip { font-size: 0.72rem; font-weight: 600; background: var(--primary-light); color: var(--primary); padding: 3px 10px; border-radius: 20px; }
-    /* 하단 탭바 */
-    .bottom-nav {
-      position: fixed; bottom: 0;
-      width: 100%; max-width: 430px;
-      background: var(--card);
-      border-top: 2px solid var(--border);
-      display: flex; z-index: 200;
-      box-shadow: 0 -2px 12px rgba(0,0,0,0.07);
-    }
-    .bottom-nav button {
-      flex: 1; border: none; background: none;
-      padding: 10px 0 8px; font-size: 0.68rem; color: var(--muted);
-      display: flex; flex-direction: column; align-items: center; gap: 3px;
-      transition: all 0.2s; font-weight: 500;
-    }
+    .bottom-nav { position: fixed; bottom: 0; width: 100%; max-width: 430px; background: var(--card); border-top: 2px solid var(--border); display: flex; z-index: 200; box-shadow: 0 -2px 12px rgba(0,0,0,0.07); }
+    .bottom-nav button { flex: 1; border: none; background: none; padding: 10px 0 8px; font-size: 0.68rem; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 3px; transition: all 0.2s; font-weight: 500; cursor: pointer; }
     .bottom-nav button i { font-size: 1.35rem; }
     .bottom-nav button.active { color: var(--primary); font-weight: 700; background: var(--primary-light); }
-    /* 카드 */
     .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 14px; }
     .card-label { font-size: 0.68rem; font-weight: 600; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 8px; }
-    /* 오늘의 질문 */
     .question-card { background: var(--primary); color: #fff; border-radius: var(--radius); padding: 20px; margin-bottom: 14px; }
     .question-card .label { font-size: 0.68rem; opacity: 0.7; margin-bottom: 6px; }
     .question-card .question { font-size: 1rem; font-weight: 600; line-height: 1.55; }
-    /* 주차 선택 */
     .week-selector { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-    .week-selector button {
-      width: 32px; height: 32px; border-radius: 50%;
-      border: 1px solid var(--border); background: var(--card);
-      color: var(--primary); display: flex; align-items: center; justify-content: center;
-      transition: opacity 0.2s;
-    }
+    .week-selector button { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: var(--card); color: var(--primary); display: flex; align-items: center; justify-content: center; cursor: pointer; }
     .week-selector button:disabled { opacity: 0.25; cursor: not-allowed; }
     .week-info { flex: 1; text-align: center; }
     .week-num { font-size: 0.95rem; font-weight: 700; color: var(--primary); }
     .week-date { font-size: 0.7rem; color: var(--muted); margin-top: 1px; }
-    /* 통계 */
     .stats-row { display: flex; gap: 10px; margin-bottom: 14px; }
     .stat-box { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 10px; text-align: center; }
     .stat-box .num { font-size: 1.4rem; font-weight: 700; color: var(--primary); }
     .stat-box .lbl { font-size: 0.63rem; color: var(--muted); margin-top: 2px; }
-    /* 현황 테이블 */
     .status-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
     .status-table th { color: var(--muted); font-weight: 600; font-size: 0.68rem; padding: 8px 6px; border-bottom: 1px solid var(--border); text-align: center; }
     .status-table td { padding: 10px 6px; border-bottom: 1px solid var(--border); text-align: center; vertical-align: middle; }
@@ -99,106 +45,85 @@
     .status-table tr:last-child td { border-bottom: none; }
     .badge-done { background: var(--primary-light); color: var(--primary); padding: 2px 8px; border-radius: 20px; font-size: 0.68rem; font-weight: 600; }
     .badge-no { background: #f0f0f0; color: #ccc; padding: 2px 8px; border-radius: 20px; font-size: 0.68rem; }
-    /* ============ 내 성장 - 새 디자인 ============ */
-    /* 흐름 카드 (가장 강조) */
-    .flow-hero {
-      background: linear-gradient(135deg, var(--primary) 0%, #8a9e7a 100%);
-      color: #fff; border-radius: var(--radius); padding: 22px 20px; margin-bottom: 14px;
-    }
-    .flow-hero .label { font-size: 0.68rem; opacity: 0.75; margin-bottom: 8px; letter-spacing: 0.3px; }
+    /* 내 성장 */
+    .flow-hero { background: linear-gradient(135deg, var(--primary) 0%, #8a9e7a 100%); color: #fff; border-radius: var(--radius); padding: 22px 20px; margin-bottom: 14px; }
+    .flow-hero .label { font-size: 0.68rem; opacity: 0.75; margin-bottom: 8px; }
     .flow-hero .flow-text { font-size: 1rem; font-weight: 600; line-height: 1.6; }
-    .flow-hero .group-badge { display: inline-block; margin-top: 10px; font-size: 0.7rem; background: rgba(255,255,255,0.2); padding: 3px 10px; border-radius: 20px; }
-    /* 섹션 카드들 */
     .section-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 12px; }
     .section-title { font-size: 0.78rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
-    /* 감정 태그 */
     .tag-row { display: flex; flex-wrap: wrap; gap: 7px; }
     .tag { background: var(--primary-light); color: var(--primary); border-radius: 20px; padding: 5px 13px; font-size: 0.8rem; font-weight: 500; }
     .tag.soft { background: var(--accent-light); color: #8a6628; }
     .tag.ghost { background: #f5f5f5; color: #aaa; font-size: 0.75rem; }
-    /* 나에게 건넨 말 - quote 카드 */
     .self-talk-list { display: flex; flex-direction: column; gap: 8px; }
-    .self-talk-item {
-      background: var(--accent-light); border-left: 3px solid var(--accent);
-      border-radius: 8px; padding: 11px 14px;
-      font-size: 0.88rem; color: #6b4e1a; line-height: 1.5; font-style: italic;
-    }
-    /* 내면 흐름 - 성찰 노트 */
-    .inner-pattern-text {
-      font-size: 0.88rem; line-height: 1.8; color: var(--text);
-      background: #fafaf8; border-radius: 10px; padding: 14px;
-      border: 1px solid var(--border);
-    }
-    /* 코칭 */
-    .coaching-card {
-      background: var(--primary-light); border-radius: 12px;
-      padding: 14px 16px; text-align: center;
-      font-size: 0.88rem; color: var(--primary); font-weight: 500; line-height: 1.6;
-    }
-    /* 처음의 나 - accordion */
-    .initial-toggle {
-      width: 100%; background: none; border: 1px dashed var(--border);
-      border-radius: 10px; padding: 12px 16px; text-align: left;
-      font-size: 0.82rem; color: var(--muted); font-weight: 500;
-      display: flex; align-items: center; justify-content: space-between;
-      cursor: pointer; transition: all 0.2s;
-    }
-    .initial-toggle:hover { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
+    .self-talk-item { background: var(--accent-light); border-left: 3px solid var(--accent); border-radius: 8px; padding: 11px 14px; font-size: 0.88rem; color: #6b4e1a; line-height: 1.5; font-style: italic; }
+    .inner-pattern-text { font-size: 0.88rem; line-height: 1.8; color: var(--text); background: #fafaf8; border-radius: 10px; padding: 14px; border: 1px solid var(--border); }
+    .coaching-card { background: var(--primary-light); border-radius: 12px; padding: 14px 16px; text-align: center; font-size: 0.88rem; color: var(--primary); font-weight: 500; line-height: 1.6; margin-bottom: 12px; }
+    .initial-toggle { width: 100%; background: none; border: 1px dashed var(--border); border-radius: 10px; padding: 12px 16px; text-align: left; font-size: 0.82rem; color: var(--muted); font-weight: 500; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+    .initial-toggle:hover { background: var(--primary-light); color: var(--primary); }
     .initial-body { padding: 14px; }
     .initial-row { display: flex; gap: 8px; margin-bottom: 8px; font-size: 0.83rem; align-items: flex-start; }
     .initial-row:last-child { margin-bottom: 0; }
     .initial-label { font-size: 0.68rem; font-weight: 700; color: var(--primary); min-width: 60px; padding-top: 2px; }
     .initial-val { color: var(--text); line-height: 1.5; }
-    /* 소스 배지 */
     .source-badge { display: inline-flex; align-items: center; gap: 3px; font-size: 0.63rem; padding: 2px 7px; border-radius: 20px; font-weight: 600; }
     .source-badge.ai { background: #e8f0fe; color: #1a56db; }
     .source-badge.keyword { background: #f0f0f0; color: #999; }
     .source-badge.cached { background: #e8f5e9; color: #2e7d32; }
-    /* 타임라인 */
     .timeline-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
     .timeline-item:last-child { border-bottom: none; }
     .timeline-date { font-size: 0.72rem; color: var(--muted); min-width: 36px; padding-top: 2px; }
     .timeline-text { font-size: 0.84rem; line-height: 1.5; color: var(--text); }
-    /* 폼 */
+    /* 운영자 */
     .form-label { font-size: 0.82rem; font-weight: 600; color: var(--text); margin-bottom: 5px; }
     .form-control, .form-select { border: 1px solid var(--border); border-radius: 10px; font-size: 0.88rem; padding: 10px 12px; background: var(--bg); }
     .form-control:focus, .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(107,124,94,0.12); outline: none; }
     .btn-primary-custom { background: var(--primary); color: #fff; border: none; border-radius: 10px; padding: 12px; font-size: 0.92rem; font-weight: 600; width: 100%; cursor: pointer; }
     .btn-primary-custom:disabled { opacity: 0.5; cursor: not-allowed; }
-    /* 탭 */
+    .btn-ghost { background: none; border: 1px solid var(--border); border-radius: 10px; padding: 8px 16px; font-size: 0.82rem; color: var(--muted); cursor: pointer; }
+    .btn-ghost:hover { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
     .inner-tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 16px; }
     .inner-tab { flex: 1; background: none; border: none; padding: 10px; font-size: 0.84rem; color: var(--muted); font-weight: 500; border-bottom: 2px solid transparent; margin-bottom: -2px; cursor: pointer; }
     .inner-tab.active { color: var(--primary); font-weight: 700; border-bottom: 2px solid var(--primary); }
     /* 운영자 전체흐름 테이블 */
-    .admin-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
-    .admin-table th { background: var(--primary-light); color: var(--primary); padding: 8px 6px; font-weight: 600; font-size: 0.68rem; }
-    .admin-table td { padding: 9px 6px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-    .admin-table tr:last-child td { border-bottom: none; }
+    .admin-flow-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+    .admin-flow-table th { background: var(--primary-light); color: var(--primary); padding: 9px 8px; font-weight: 600; font-size: 0.68rem; text-align: left; }
+    .admin-flow-table td { padding: 11px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .admin-flow-table tr:last-child td { border-bottom: none; }
+    .admin-flow-table tr { cursor: pointer; transition: background 0.15s; }
+    .admin-flow-table tr:hover { background: var(--primary-light); }
+    .flow-status-badge { font-size: 0.75rem; white-space: nowrap; }
+    .member-name-cell { font-weight: 600; color: var(--text); }
+    .flow-cell { font-size: 0.75rem; color: var(--muted); }
+    .emotion-cell { display: flex; flex-wrap: wrap; gap: 4px; }
+    .emotion-mini { background: var(--primary-light); color: var(--primary); border-radius: 20px; padding: 2px 8px; font-size: 0.65rem; }
+    /* 운영 메모 */
+    .admin-note-area { background: #fffef7; border: 1px dashed var(--accent); border-radius: 10px; padding: 14px; }
+    .admin-note-area textarea { border: none; background: transparent; resize: none; width: 100%; font-size: 0.85rem; line-height: 1.6; color: var(--text); outline: none; font-family: inherit; }
+    .admin-note-label { font-size: 0.68rem; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
     /* 로딩 */
     .loading { text-align: center; padding: 32px; color: var(--muted); font-size: 0.85rem; }
     .spinner { width: 26px; height: 26px; border: 3px solid var(--border); border-top: 3px solid var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 10px; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    /* 잠금 */
     .lock-screen { padding: 48px 20px; text-align: center; }
     .lock-screen i { font-size: 2.5rem; color: var(--primary); margin-bottom: 16px; display: block; }
-    /* 토스트 */
     .toast-msg { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 0.84rem; z-index: 999; opacity: 0; transition: opacity 0.3s; white-space: nowrap; }
     .toast-msg.show { opacity: 1; }
     .screen { display: none; padding: 16px; }
     .screen.active { display: block; }
     .empty-state { text-align: center; padding: 28px; color: var(--muted); font-size: 0.84rem; }
+    .back-btn { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; color: var(--primary); font-weight: 600; cursor: pointer; margin-bottom: 14px; background: none; border: none; padding: 0; }
   </style>
 </head>
 <body>
 <div id="app-wrapper">
 
-<!-- 헤더 -->
 <div class="app-header">
   <h1>🌱 자존주니</h1>
   <span class="week-chip" id="headerWeekChip"></span>
 </div>
 
-<!-- 홈 화면 -->
+<!-- 홈 -->
 <div id="screen-home" class="screen active">
   <div class="question-card">
     <div class="label">오늘의 알아차림 질문</div>
@@ -206,10 +131,7 @@
   </div>
   <div class="week-selector">
     <button id="homeWkPrev" onclick="changeWeek(-1)"><i class="bi bi-chevron-left"></i></button>
-    <div class="week-info">
-      <div class="week-num" id="homeWeekNum"></div>
-      <div class="week-date" id="homeWeekDate"></div>
-    </div>
+    <div class="week-info"><div class="week-num" id="homeWeekNum"></div><div class="week-date" id="homeWeekDate"></div></div>
     <button id="homeWkNext" onclick="changeWeek(1)"><i class="bi bi-chevron-right"></i></button>
   </div>
   <div class="stats-row" id="statsArea">
@@ -223,7 +145,7 @@
   </div>
 </div>
 
-<!-- 내 성장 화면 -->
+<!-- 내 성장 -->
 <div id="screen-growth" class="screen">
   <div class="card" style="margin-bottom:10px;">
     <div class="card-label">멤버 선택</div>
@@ -233,16 +155,13 @@
   </div>
   <div class="week-selector">
     <button id="growthWkPrev" onclick="changeWeek(-1)"><i class="bi bi-chevron-left"></i></button>
-    <div class="week-info">
-      <div class="week-num" id="growthWeekNum"></div>
-      <div class="week-date" id="growthWeekDate"></div>
-    </div>
+    <div class="week-info"><div class="week-num" id="growthWeekNum"></div><div class="week-date" id="growthWeekDate"></div></div>
     <button id="growthWkNext" onclick="changeWeek(1)"><i class="bi bi-chevron-right"></i></button>
   </div>
   <div id="growthResult"></div>
 </div>
 
-<!-- 운영자 화면 -->
+<!-- 운영자 -->
 <div id="screen-admin" class="screen">
   <div id="adminLock">
     <div class="lock-screen">
@@ -256,50 +175,42 @@
   <div id="adminDashboard" style="display:none;">
     <div class="inner-tabs">
       <button class="inner-tab active" id="tab-input" onclick="switchAdminTab('input')">📝 데이터 입력</button>
-      <button class="inner-tab" id="tab-analysis" onclick="switchAdminTab('analysis')">📊 전체 흐름</button>
+      <button class="inner-tab" id="tab-analysis" onclick="switchAdminTab('analysis')">🌿 전체 흐름</button>
     </div>
     <!-- 데이터 입력 -->
     <div id="adminTabInput">
       <div class="card">
-        <div class="mb-3">
-          <label class="form-label">날짜</label>
-          <input type="date" class="form-control" id="inputDate" />
-        </div>
-        <div class="mb-3">
-          <label class="form-label">멤버</label>
-          <select class="form-select" id="inputMember"><option value="">-- 멤버 선택 --</option></select>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">자기존중 기록 (데일리)</label>
-          <textarea class="form-control" id="inputSelfRespect" rows="3" placeholder="오늘의 알아차림 내용"></textarea>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">주간 글쓰기 <span style="color:var(--muted);font-weight:400;">(선택)</span></label>
-          <textarea class="form-control" id="inputWeeklyWriting" rows="3" placeholder="주간 글쓰기 내용"></textarea>
-        </div>
+        <div class="mb-3"><label class="form-label">날짜</label><input type="date" class="form-control" id="inputDate" /></div>
+        <div class="mb-3"><label class="form-label">멤버</label><select class="form-select" id="inputMember"><option value="">-- 멤버 선택 --</option></select></div>
+        <div class="mb-3"><label class="form-label">자기존중 기록 (데일리)</label><textarea class="form-control" id="inputSelfRespect" rows="3" placeholder="오늘의 알아차림 내용"></textarea></div>
+        <div class="mb-3"><label class="form-label">주간 글쓰기 <span style="color:var(--muted);font-weight:400;">(선택)</span></label><textarea class="form-control" id="inputWeeklyWriting" rows="3" placeholder="주간 글쓰기 내용"></textarea></div>
         <button class="btn-primary-custom" id="saveBtn" onclick="doSaveAuth()">저장하기</button>
         <div id="saveResult" style="text-align:center;margin-top:10px;font-size:0.85rem;"></div>
       </div>
     </div>
-    <!-- 전체 흐름 분석 -->
+    <!-- 전체 흐름 -->
     <div id="adminTabAnalysis" style="display:none;">
-      <div class="week-selector">
-        <button id="adminWkPrev" onclick="changeWeek(-1)"><i class="bi bi-chevron-left"></i></button>
-        <div class="week-info">
-          <div class="week-num" id="adminWeekNum"></div>
-          <div class="week-date" id="adminWeekDate"></div>
+      <!-- 목록 뷰 -->
+      <div id="adminListView">
+        <div class="week-selector">
+          <button id="adminWkPrev" onclick="changeWeek(-1)"><i class="bi bi-chevron-left"></i></button>
+          <div class="week-info"><div class="week-num" id="adminWeekNum"></div><div class="week-date" id="adminWeekDate"></div></div>
+          <button id="adminWkNext" onclick="changeWeek(1)"><i class="bi bi-chevron-right"></i></button>
         </div>
-        <button id="adminWkNext" onclick="changeWeek(1)"><i class="bi bi-chevron-right"></i></button>
+        <div class="card" style="padding:14px;">
+          <div class="card-label mb-2">전체 흐름 — 멤버를 눌러 상세 보기</div>
+          <div id="adminAnalysisArea"><div class="loading"><div class="spinner"></div>불러오는 중...</div></div>
+        </div>
       </div>
-      <div class="card">
-        <div class="card-label mb-2">전체 멤버 흐름</div>
-        <div id="adminAnalysisArea"><div class="loading"><div class="spinner"></div>불러오는 중...</div></div>
+      <!-- 상세 뷰 -->
+      <div id="adminDetailView" style="display:none;">
+        <button class="back-btn" onclick="showAdminList()"><i class="bi bi-arrow-left"></i> 전체 흐름으로</button>
+        <div id="adminDetailContent"></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- 하단 탭바 -->
 <nav class="bottom-nav">
   <button class="active" id="navHome" onclick="switchScreen('home')"><i class="bi bi-house-fill"></i>홈</button>
   <button id="navGrowth" onclick="switchScreen('growth')"><i class="bi bi-graph-up-arrow"></i>내 성장</button>
@@ -309,19 +220,22 @@
 </div>
 
 <script>
-const GAS_URL = "https://script.google.com/macros/s/AKfycbz9s3UCpac9cKuxTWObkyxh0g5F7YVcT3O3kg-GFfYebIx8nNPVLkWXpY_znu1sune5dA/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycby4DXoLY4L3Q4bl1cTL5IrIQzxmmiM-ShgP1KuiNv7rGyb-avTdpR-2BK9gDuwqWmBZ_Q/exec";
 
-// 프로그램 주차 설정 (1주차~8주차 고정)
-const PROGRAM_START = new Date(new Date().getFullYear(), 3, 20); // 4월 20일 (현재 연도 자동)
+const PROGRAM_START = new Date(new Date().getFullYear(), 3, 20); // 4월 20일 현재연도
 const MAX_WEEKS = 8;
 
-let currentWeek = getDefaultWeek(); // 1~8
+let currentWeek = getDefaultWeek();
 let membersCache = [];
 let adminLoggedIn = false;
 let currentAdminTab = "input";
+let adminAnalysisData = []; // 전체 분석 결과 캐시
+
+// 브라우저 메모리 캐시 (세션 동안 유지)
+const insightMemCache = {};
 
 // =============================================
-// 주차 계산
+// 주차
 // =============================================
 function getDefaultWeek() {
   const now = new Date();
@@ -330,33 +244,25 @@ function getDefaultWeek() {
   const w = Math.floor(diff / (7 * 24 * 60 * 60 * 1000)) + 1;
   return Math.min(Math.max(w, 1), MAX_WEEKS);
 }
-
-function getWeekMonday(weekNum) {
+function getWeekMonday(w) {
   const d = new Date(PROGRAM_START);
-  d.setDate(d.getDate() + (weekNum - 1) * 7);
+  d.setDate(d.getDate() + (w - 1) * 7);
   return d;
-}
-
-function getWeekSunday(weekNum) {
-  const d = getWeekMonday(weekNum);
-  d.setDate(d.getDate() + 6);
-  return d;
-}
-
-function weekNumText(w) { return w + "주차"; }
-function weekDateText(w) {
-  const s = getWeekMonday(w), e = getWeekSunday(w);
-  return (s.getMonth()+1) + "/" + s.getDate() + " ~ " + (e.getMonth()+1) + "/" + e.getDate();
 }
 function weekMondayStr(w) {
   const d = getWeekMonday(w);
   return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
 }
+function weekNumText(w) { return w + "주차"; }
+function weekDateText(w) {
+  const s = getWeekMonday(w);
+  const e = new Date(s); e.setDate(s.getDate() + 6);
+  return (s.getMonth()+1) + "/" + s.getDate() + " ~ " + (e.getMonth()+1) + "/" + e.getDate();
+}
 function todayStr() {
   const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
   return now.getFullYear() + "-" + String(now.getMonth()+1).padStart(2,"0") + "-" + String(now.getDate()).padStart(2,"0");
 }
-
 function changeWeek(dir) {
   const next = currentWeek + dir;
   if (next < 1 || next > MAX_WEEKS) return;
@@ -365,25 +271,23 @@ function changeWeek(dir) {
   const active = document.querySelector('.screen.active').id;
   if (active === 'screen-home') loadHomeData();
   if (active === 'screen-growth' && document.getElementById('growthMemberSelect').value) loadGrowthInsight();
-  if (active === 'screen-admin' && currentAdminTab === 'analysis') loadAdminAnalysis();
+  if (active === 'screen-admin' && currentAdminTab === 'analysis') {
+    adminAnalysisData = [];
+    loadAdminAnalysis();
+  }
 }
-
 function updateWeekUI() {
-  const num = weekNumText(currentWeek);
-  const date = weekDateText(currentWeek);
+  const num = weekNumText(currentWeek), date = weekDateText(currentWeek);
   document.getElementById("headerWeekChip").textContent = num;
-  ["home","growth","admin"].forEach(id => {
-    const n = document.getElementById(id + "WeekNum");
-    const d = document.getElementById(id + "WeekDate");
-    if (n) n.textContent = num;
-    if (d) d.textContent = date;
+  [["home","WeekNum","WeekDate"],["growth","WeekNum","WeekDate"],["admin","WeekNum","WeekDate"]].forEach(([id,n,d]) => {
+    const ne = document.getElementById(id+n), de = document.getElementById(id+d);
+    if (ne) ne.textContent = num;
+    if (de) de.textContent = date;
   });
-  // 화살표 비활성화
   ["home","growth","admin"].forEach(id => {
-    const prev = document.getElementById(id + "WkPrev");
-    const next = document.getElementById(id + "WkNext");
-    if (prev) prev.disabled = (currentWeek <= 1);
-    if (next) next.disabled = (currentWeek >= MAX_WEEKS);
+    const p = document.getElementById(id+"WkPrev"), n = document.getElementById(id+"WkNext");
+    if (p) p.disabled = (currentWeek <= 1);
+    if (n) n.disabled = (currentWeek >= MAX_WEEKS);
   });
 }
 
@@ -394,18 +298,12 @@ async function gasGet(params) {
   const url = GAS_URL + "?" + new URLSearchParams(params).toString();
   const res = await fetch(url, { method: "GET", redirect: "follow" });
   const text = await res.text();
-  try { return JSON.parse(text); }
-  catch(e) { throw new Error("응답 파싱 오류: " + text.slice(0, 80)); }
+  try { return JSON.parse(text); } catch(e) { throw new Error("응답 오류: " + text.slice(0, 80)); }
 }
 async function gasPost(body) {
-  const res = await fetch(GAS_URL, {
-    method: "POST", redirect: "follow",
-    headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify(body)
-  });
+  const res = await fetch(GAS_URL, { method: "POST", redirect: "follow", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(body) });
   const text = await res.text();
-  try { return JSON.parse(text); }
-  catch(e) { throw new Error("응답 파싱 오류: " + text.slice(0, 80)); }
+  try { return JSON.parse(text); } catch(e) { throw new Error("응답 오류: " + text.slice(0, 80)); }
 }
 
 // =============================================
@@ -421,7 +319,7 @@ function switchScreen(name) {
 }
 
 // =============================================
-// 홈 화면
+// 홈
 // =============================================
 async function loadHomeData() {
   document.getElementById("memberStatusArea").innerHTML = '<div class="loading"><div class="spinner"></div>불러오는 중...</div>';
@@ -437,125 +335,77 @@ async function loadHomeData() {
     document.getElementById("memberStatusArea").innerHTML = '<div style="color:var(--danger);text-align:center;padding:20px;">데이터를 불러오지 못했습니다.<br><small>' + e.message + '</small></div>';
   }
 }
-
 function renderStats(s) {
   if (!s) return;
   document.getElementById("statsArea").innerHTML = `
     <div class="stat-box"><div class="num">${s.avg}회</div><div class="lbl">평균 인증</div></div>
     <div class="stat-box"><div class="num">${s.max}회</div><div class="lbl">최고 인증</div></div>
-    <div class="stat-box"><div class="num">${s.todayCount}명</div><div class="lbl">오늘 인증</div></div>
-  `;
+    <div class="stat-box"><div class="num">${s.todayCount}명</div><div class="lbl">오늘 인증</div></div>`;
 }
-
 function renderMemberTable(list) {
   if (!list || !list.length) { document.getElementById("memberStatusArea").innerHTML = '<div class="empty-state">멤버 데이터가 없습니다.</div>'; return; }
-  const rows = list.map(m => `
-    <tr>
-      <td>${m.name}</td>
-      <td>${m.count}회</td>
-      <td>${m.writingDone ? '<span class="badge-done">완료</span>' : '<span class="badge-no">-</span>'}</td>
-      <td>${m.today ? '<span class="badge-done">✓</span>' : '<span class="badge-no">-</span>'}</td>
-    </tr>`).join("");
-  document.getElementById("memberStatusArea").innerHTML = `
-    <table class="status-table">
-      <thead><tr><th>닉네임</th><th>인증</th><th>주간 글쓰기</th><th>오늘</th></tr></thead>
-      <tbody>${rows}</tbody>
-    </table>`;
+  const rows = list.map(m => `<tr><td>${m.name}</td><td>${m.count}회</td><td>${m.writingDone ? '<span class="badge-done">완료</span>' : '<span class="badge-no">-</span>'}</td><td>${m.today ? '<span class="badge-done">✓</span>' : '<span class="badge-no">-</span>'}</td></tr>`).join("");
+  document.getElementById("memberStatusArea").innerHTML = `<table class="status-table"><thead><tr><th>닉네임</th><th>인증</th><th>주간 글쓰기</th><th>오늘</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
 // =============================================
-// 내 성장 화면
+// 내 성장
 // =============================================
 async function loadGrowthMemberList() {
   if (membersCache.length > 0) { fillSelect("growthMemberSelect"); return; }
-  try {
-    membersCache = await gasGet({ action: "getMembers" });
-    fillSelect("growthMemberSelect");
-  } catch(e) { showToast("멤버 목록 오류"); }
+  try { membersCache = await gasGet({ action: "getMembers" }); fillSelect("growthMemberSelect"); }
+  catch(e) { showToast("멤버 목록 오류"); }
 }
-
 function fillSelect(id) {
-  const sel = document.getElementById(id);
-  const cur = sel.value;
+  const sel = document.getElementById(id), cur = sel.value;
   sel.innerHTML = '<option value="">-- 멤버를 선택하세요 --</option>';
-  membersCache.forEach(m => {
-    const o = document.createElement("option");
-    o.value = m.id; o.textContent = m.name; sel.appendChild(o);
-  });
+  membersCache.forEach(m => { const o = document.createElement("option"); o.value = m.id; o.textContent = m.name; sel.appendChild(o); });
   if (cur) sel.value = cur;
 }
-
 async function loadGrowthInsight() {
   const name = document.getElementById("growthMemberSelect").value;
   if (!name) { document.getElementById("growthResult").innerHTML = ""; return; }
+  const memKey = name + "_" + currentWeek;
+  // 브라우저 메모리 캐시 확인 → 즉시 렌더링
+  if (insightMemCache[memKey]) { renderInsight(insightMemCache[memKey], "growthResult"); return; }
   document.getElementById("growthResult").innerHTML = '<div class="loading"><div class="spinner"></div>기록을 읽고 있어요...</div>';
   try {
     const data = await gasGet({ action: "getMemberInsight", name, week: weekMondayStr(currentWeek) });
-    renderInsight(data);
+    insightMemCache[memKey] = data;
+    renderInsight(data, "growthResult");
   } catch(e) {
     document.getElementById("growthResult").innerHTML = '<div style="color:var(--danger);padding:16px;">오류: ' + e.message + '</div>';
   }
 }
 
-function groupClass(g) {
-  if (!g) return "";
-  return g.startsWith("①")?"group-1":g.startsWith("②")?"group-2":g.startsWith("③")?"group-3":g.startsWith("④")?"group-4":"group-5";
-}
+function safeArr(v) { if (!v) return []; return Array.isArray(v) ? v : [v]; }
 
-function safeArr(val) {
-  if (!val) return [];
-  if (Array.isArray(val)) return val;
-  return [val];
-}
+function renderInsight(d, containerId, isAdmin = false) {
+  if (!d) { document.getElementById(containerId).innerHTML = '<div class="empty-state">데이터가 없습니다.</div>'; return; }
+  const srcMap = { ai: "AI 분석", cached: "🗂 저장된 분석", keyword: "키워드 분석" };
+  const srcClass = { ai: "ai", cached: "cached", keyword: "keyword" };
+  const sourceBadge = d.source && d.source !== "none" ? `<span class="source-badge ${srcClass[d.source] || 'keyword'}">${srcMap[d.source] || ""}</span>` : "";
 
-function renderInsight(d) {
-  if (!d) { document.getElementById("growthResult").innerHTML = '<div class="empty-state">데이터가 없습니다.</div>'; return; }
+  const flowHtml = `<div class="flow-hero"><div class="label">🌊 이번 주 흐름</div><div class="flow-text">${d.weekly_flow_summary || "이번 주 흐름이 아직 이어지지 않았어요."}</div></div>`;
 
-  const srcMap = { ai: "AI 분석", cached: "🗂 저장된 분석", keyword: "키워드 분석", none: "" };
-  const srcClass = { ai: "ai", cached: "cached", keyword: "keyword", none: "keyword" };
-  const sourceBadge = d.source && d.source !== "none"
-    ? `<span class="source-badge ${srcClass[d.source]}">${srcMap[d.source]}</span>` : "";
+  const emotions = safeArr(d.emotion_keywords).filter(Boolean);
+  const emotionHtml = emotions.length ? emotions.map(e => `<span class="tag">${e}</span>`).join("") : `<span class="tag ghost">기록을 기다리고 있어요</span>`;
 
-  // 1. 이번 주 흐름
-  const flowHtml = `
-    <div class="flow-hero">
-      <div class="label">🌊 이번 주 흐름</div>
-      <div class="flow-text">${d.weekly_flow_summary || "기록을 기다리고 있어요."}</div>
-      ${d.group && d.group !== "미분류" ? `<span class="group-badge">${d.group}</span>` : ""}
-    </div>`;
+  const selfcare = safeArr(d.selfcare_patterns).filter(Boolean);
+  const selfcareHtml = selfcare.length ? selfcare.map(s => `<span class="tag soft">${s}</span>`).join("") : `<span class="tag ghost">기록을 기다리고 있어요</span>`;
 
-  // 2. 자주 느낀 상태
-  const emotions = safeArr(d.emotion_keywords);
-  const emotionHtml = emotions.length > 0 && emotions[0] !== "기록을 기다리고 있어요"
-    ? emotions.map(e => `<span class="tag">${e}</span>`).join("")
-    : `<span class="tag ghost">기록을 기다리고 있어요</span>`;
+  const talks = safeArr(d.self_talk_patterns).filter(Boolean);
+  const talkHtml = talks.length ? talks.map(t => `<div class="self-talk-item">" ${t} "</div>`).join("") : `<div class="self-talk-item" style="color:#bbb;font-style:normal;">기록을 기다리고 있어요</div>`;
 
-  // 3. 나를 돌본 방식
-  const selfcare = safeArr(d.selfcare_patterns);
-  const selfcareHtml = selfcare.length > 0 && selfcare[0] !== "기록을 기다리고 있어요"
-    ? selfcare.map(s => `<span class="tag soft">${s}</span>`).join("")
-    : `<span class="tag ghost">기록을 기다리고 있어요</span>`;
+  const innerHtml = d.weekly_inner_patterns ? `<div class="inner-pattern-text">${d.weekly_inner_patterns}</div>` : `<div class="inner-pattern-text" style="color:#bbb;">주간 글쓰기 기록을 기다리고 있어요.</div>`;
 
-  // 4. 나에게 건넨 말
-  const talks = safeArr(d.self_talk_patterns);
-  const talkHtml = talks.length > 0 && talks[0] !== "기록을 기다리고 있어요"
-    ? talks.map(t => `<div class="self-talk-item">" ${t} "</div>`).join("")
-    : `<div class="self-talk-item" style="color:#bbb;font-style:normal;">기록을 기다리고 있어요</div>`;
-
-  // 5. 내면 흐름 (주간 글쓰기)
-  const innerHtml = d.weekly_inner_patterns
-    ? `<div class="inner-pattern-text">${d.weekly_inner_patterns}</div>`
-    : `<div class="inner-pattern-text" style="color:#bbb;">주간 글쓰기 기록을 기다리고 있어요.</div>`;
-
-  // 6. 처음의 나 (접기)
   const bg = d.background || {};
   const initialHtml = (bg.reason || bg.status || bg.goal) ? `
     <div style="margin-bottom:12px;">
       <button class="initial-toggle" onclick="toggleInitial(this)">
-        <span>🌱 처음의 나</span>
-        <i class="bi bi-chevron-down"></i>
+        <span>🌱 처음의 나</span><i class="bi bi-chevron-down"></i>
       </button>
-      <div class="collapse" id="initialBody">
+      <div class="collapse" id="initialBody_${containerId}">
         <div class="initial-body">
           ${bg.reason ? `<div class="initial-row"><span class="initial-label">신청 이유</span><span class="initial-val">${bg.reason}</span></div>` : ""}
           ${bg.status ? `<div class="initial-row"><span class="initial-label">시작 당시</span><span class="initial-val">${bg.status}</span></div>` : ""}
@@ -564,18 +414,23 @@ function renderInsight(d) {
       </div>
     </div>` : "";
 
-  // 코칭
-  const coachingHtml = d.coaching
-    ? `<div class="coaching-card">💚 ${d.coaching}</div>` : "";
+  const coachingHtml = d.coaching ? `<div class="coaching-card">💚 ${d.coaching}</div>` : "";
 
-  // 타임라인
-  const tl = (d.timeline || []).map(t => `
-    <div class="timeline-item">
-      <div class="timeline-date">${t.date}</div>
-      <div class="timeline-text">${t.text}</div>
-    </div>`).join("") || '<div class="empty-state">이번 주 기록이 없어요.</div>';
+  const tl = (d.timeline || []).map(t => `<div class="timeline-item"><div class="timeline-date">${t.date}</div><div class="timeline-text">${t.text}</div></div>`).join("") || '<div class="empty-state">이번 주 기록이 없어요.</div>';
 
-  document.getElementById("growthResult").innerHTML = `
+  // 운영자 메모 (운영자 뷰에서만)
+  const adminMemoHtml = isAdmin ? `
+    <div class="section-card" style="margin-top:4px;">
+      <div class="section-title"><i class="bi bi-pencil-square"></i> 운영 메모 <span style="font-size:0.65rem;color:var(--muted);font-weight:400;">(운영자 전용)</span></div>
+      <div class="admin-note-area">
+        <div class="admin-note-label">관찰 메모</div>
+        <textarea id="adminNoteText_${d.name}" rows="3" placeholder="흐름 관찰 메모를 남겨보세요...">${d.admin_note || ""}</textarea>
+      </div>
+      <button onclick="saveAdminNote('${d.name}')" style="margin-top:10px;background:var(--primary-light);color:var(--primary);border:none;border-radius:8px;padding:8px 16px;font-size:0.82rem;font-weight:600;cursor:pointer;">메모 저장</button>
+      <span id="noteSaveResult_${d.name}" style="font-size:0.78rem;margin-left:8px;color:var(--success);"></span>
+    </div>` : "";
+
+  document.getElementById(containerId).innerHTML = `
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
       <div style="font-weight:700;font-size:1rem;">${d.name}</div>
       ${sourceBadge}
@@ -594,11 +449,12 @@ function renderInsight(d) {
       <div class="self-talk-list">${talkHtml}</div>
     </div>
     <div class="section-card">
-      <div class="section-title"><i class="bi bi-journal-text"></i> 내가 자주 반복하는 흐름</div>
+      <div class="section-title"><i class="bi bi-journal-text"></i> 내가 자주 반복하는 흐름 <span style="font-size:0.65rem;font-weight:400;color:var(--muted);">(주간 글쓰기 분석)</span></div>
       ${innerHtml}
     </div>
     ${initialHtml}
     ${coachingHtml}
+    ${adminMemoHtml}
     <div class="card" style="padding:14px;margin-top:14px;">
       <div class="card-label">기록 타임라인</div>
       ${tl}
@@ -606,19 +462,15 @@ function renderInsight(d) {
 }
 
 function toggleInitial(btn) {
-  const body = document.getElementById("initialBody");
+  const id = btn.nextElementSibling.id;
+  const body = document.getElementById(id);
   const icon = btn.querySelector("i");
-  if (body.classList.contains("show")) {
-    body.classList.remove("show");
-    icon.className = "bi bi-chevron-down";
-  } else {
-    body.classList.add("show");
-    icon.className = "bi bi-chevron-up";
-  }
+  if (body.classList.contains("show")) { body.classList.remove("show"); icon.className = "bi bi-chevron-down"; }
+  else { body.classList.add("show"); icon.className = "bi bi-chevron-up"; }
 }
 
 // =============================================
-// 운영자 화면
+// 운영자
 // =============================================
 async function doAdminLogin() {
   const pw = document.getElementById("adminPwInput").value;
@@ -630,92 +482,101 @@ async function doAdminLogin() {
       document.getElementById("adminDashboard").style.display = "block";
       await loadAdminMemberList();
       document.getElementById("inputDate").value = todayStr();
-    } else {
-      document.getElementById("adminPwError").textContent = "비밀번호가 올바르지 않습니다.";
-    }
+    } else { document.getElementById("adminPwError").textContent = "비밀번호가 올바르지 않습니다."; }
   } catch(e) { document.getElementById("adminPwError").textContent = "오류: " + e.message; }
 }
-
 async function loadAdminMemberList() {
   if (!membersCache.length) membersCache = await gasGet({ action: "getMembers" });
   const sel = document.getElementById("inputMember");
   sel.innerHTML = '<option value="">-- 멤버 선택 --</option>';
   membersCache.forEach(m => { const o = document.createElement("option"); o.value = m.id; o.textContent = m.name; sel.appendChild(o); });
 }
-
 async function doSaveAuth() {
-  const formData = {
-    date: document.getElementById("inputDate").value,
-    memberId: document.getElementById("inputMember").value,
-    selfRespect: document.getElementById("inputSelfRespect").value,
-    weeklyWriting: document.getElementById("inputWeeklyWriting").value
-  };
-  const btn = document.getElementById("saveBtn");
-  const result = document.getElementById("saveResult");
+  const formData = { date: document.getElementById("inputDate").value, memberId: document.getElementById("inputMember").value, selfRespect: document.getElementById("inputSelfRespect").value, weeklyWriting: document.getElementById("inputWeeklyWriting").value };
+  const btn = document.getElementById("saveBtn"), result = document.getElementById("saveResult");
   btn.disabled = true; btn.textContent = "저장 중...";
   try {
     const res = await gasPost({ action: "saveAuth", formData });
     result.textContent = res.message;
     result.style.color = res.message.startsWith("✅") ? "var(--success)" : "var(--danger)";
-    if (res.message.startsWith("✅")) {
-      document.getElementById("inputSelfRespect").value = "";
-      document.getElementById("inputWeeklyWriting").value = "";
-      document.getElementById("inputMember").value = "";
-    }
-  } catch(e) {
-    result.textContent = "❌ 저장 실패: " + e.message;
-    result.style.color = "var(--danger)";
-  } finally { btn.disabled = false; btn.textContent = "저장하기"; }
+    if (res.message.startsWith("✅")) { document.getElementById("inputSelfRespect").value = ""; document.getElementById("inputWeeklyWriting").value = ""; document.getElementById("inputMember").value = ""; }
+  } catch(e) { result.textContent = "❌ 저장 실패: " + e.message; result.style.color = "var(--danger)"; }
+  finally { btn.disabled = false; btn.textContent = "저장하기"; }
 }
-
 function switchAdminTab(tab) {
   currentAdminTab = tab;
-  document.getElementById("tab-input").classList.toggle("active", tab==="input");
-  document.getElementById("tab-analysis").classList.toggle("active", tab==="analysis");
-  document.getElementById("adminTabInput").style.display = tab==="input" ? "block" : "none";
-  document.getElementById("adminTabAnalysis").style.display = tab==="analysis" ? "block" : "none";
+  document.getElementById("tab-input").classList.toggle("active", tab === "input");
+  document.getElementById("tab-analysis").classList.toggle("active", tab === "analysis");
+  document.getElementById("adminTabInput").style.display = tab === "input" ? "block" : "none";
+  document.getElementById("adminTabAnalysis").style.display = tab === "analysis" ? "block" : "none";
   if (tab === "analysis") loadAdminAnalysis();
 }
-
 async function loadAdminAnalysis() {
-  document.getElementById("adminAnalysisArea").innerHTML = '<div class="loading"><div class="spinner"></div>분석 중...<br><small style="color:var(--muted);">캐시가 있으면 바로 표시됩니다</small></div>';
+  if (adminAnalysisData.length > 0) { renderAdminTable(adminAnalysisData); return; }
+  document.getElementById("adminAnalysisArea").innerHTML = '<div class="loading"><div class="spinner"></div>흐름 불러오는 중...<br><small style="color:var(--muted);">캐시가 있으면 빠르게 표시됩니다</small></div>';
   try {
     const data = await gasGet({ action: "getAllAdminAnalysis", week: weekMondayStr(currentWeek) });
-    renderAdminAnalysis(data);
+    adminAnalysisData = data;
+    renderAdminTable(data);
   } catch(e) {
-    document.getElementById("adminAnalysisArea").innerHTML = '<div style="color:var(--danger);padding:12px;">분석 실패: ' + e.message + '</div>';
+    document.getElementById("adminAnalysisArea").innerHTML = '<div style="color:var(--danger);padding:12px;">오류: ' + e.message + '</div>';
   }
 }
-
-function renderAdminAnalysis(arr) {
+function renderAdminTable(arr) {
   if (!arr || !arr.length) { document.getElementById("adminAnalysisArea").innerHTML = '<div class="empty-state">데이터 없음</div>'; return; }
-  const rows = arr.map(d => {
-    const emotions = safeArr(d.emotion_keywords).filter(e => e !== "기록을 기다리고 있어요").slice(0,3).join(", ") || "-";
-    const gc = groupClass(d.group);
-    const srcIcon = d.source==="ai" ? "🤖" : d.source==="cached" ? "🗂" : "🔍";
-    return `<tr>
-      <td style="font-weight:600;">${d.name} <span style="font-size:0.7rem;">${srcIcon}</span></td>
-      <td>${d.group && d.group!=="미분류" ? `<span class="tag ${gc}" style="font-size:0.68rem;padding:2px 7px;border-radius:6px;">${d.group}</span>` : "-"}</td>
-      <td style="font-size:0.75rem;color:var(--muted);">${emotions}</td>
-      <td style="font-size:0.72rem;color:var(--muted);max-width:100px;">${(d.weekly_flow_summary||"-").split("→")[0].trim()}</td>
+  const rows = arr.map((d, i) => {
+    const emotions = safeArr(d.emotion_keywords).filter(Boolean).slice(0, 3).map(e => `<span class="emotion-mini">${e}</span>`).join("");
+    const flow = d.weekly_flow || "흐름 이어가는 중";
+    const change = d.change_direction || "-";
+    const status = d.flow_status || "🟡 흐름 흔들림";
+    return `<tr onclick="showAdminDetail(${i})">
+      <td class="member-name-cell">${d.name}</td>
+      <td class="flow-cell">${flow}</td>
+      <td><div class="emotion-cell">${emotions || "-"}</div></td>
+      <td class="flow-cell">${change}</td>
+      <td class="flow-status-badge">${status}</td>
     </tr>`;
   }).join("");
   document.getElementById("adminAnalysisArea").innerHTML = `
     <div style="overflow-x:auto;">
-      <table class="admin-table">
-        <thead><tr><th>멤버</th><th>그룹</th><th>느낀 상태</th><th>흐름 시작</th></tr></thead>
+      <table class="admin-flow-table">
+        <thead><tr><th>멤버</th><th>이번 주 흐름</th><th>느낀 상태</th><th>변화 방향</th><th>흐름 상태</th></tr></thead>
         <tbody>${rows}</tbody>
       </table>
     </div>`;
 }
+async function showAdminDetail(idx) {
+  const d = adminAnalysisData[idx];
+  if (!d) return;
+  document.getElementById("adminListView").style.display = "none";
+  document.getElementById("adminDetailView").style.display = "block";
+  // 운영 메모 로드
+  try {
+    const noteRes = await gasGet({ action: "getAdminNote", name: d.name });
+    d.admin_note = noteRes.note || "";
+  } catch(e) { d.admin_note = ""; }
+  renderInsight(d, "adminDetailContent", true);
+}
+function showAdminList() {
+  document.getElementById("adminDetailView").style.display = "none";
+  document.getElementById("adminListView").style.display = "block";
+}
+async function saveAdminNote(name) {
+  const note = document.getElementById("adminNoteText_" + name).value;
+  const resultEl = document.getElementById("noteSaveResult_" + name);
+  try {
+    await gasPost({ action: "saveAdminNote", name, note });
+    resultEl.textContent = "저장됨 ✓";
+    setTimeout(() => { resultEl.textContent = ""; }, 2000);
+  } catch(e) { resultEl.textContent = "오류"; resultEl.style.color = "var(--danger)"; }
+}
 
 function showToast(msg) {
-  const el = document.getElementById("toastMsg");
+  const el = document.getElementById("toastMsg");D
   el.textContent = msg; el.classList.add("show");
   setTimeout(() => el.classList.remove("show"), 2500);
 }
 
-// 초기화
 (async function init() {
   updateWeekUI();
   await loadHomeData();
