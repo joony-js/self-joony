@@ -141,7 +141,7 @@
 <div id="appLockScreen">
   <div class="lock-logo">🌱</div>
   <div class="lock-title">자존주니</div>
-  <div class="lock-sub">참여자 전용 공간이에요<br>비밀번호를 입력해주세요</div>
+  <div class="lock-sub" id="lockSubText">잠시만요, 불러오는 중이에요</div>
   <input type="password" id="appLockInput" placeholder="••••••" maxlength="20"
     onkeydown="if(event.key==='Enter') checkAppLock()" disabled />
   <button onclick="checkAppLock()" id="appLockBtn">불러오는 중...</button>
@@ -267,8 +267,8 @@
 <script>
 const GAS_URL = "https://script.google.com/macros/s/AKfycbw4sT42yBMuF46U_Y5m9fjIbOzH4b2XJdvmlXiXF-52VNYsKjH2UTqw0HUMIPfar_qA/exec";
 // 1번: 비밀번호는 GAS Settings 시트에서 받아옴
-let appPasswordFromGAS = "1234";
-let adminPasswordFromGAS = "1234";
+let appPasswordFromGAS = "";
+let adminPasswordFromGAS = "";
 const PROGRAM_START = new Date(new Date().getFullYear(), 3, 20);
 const MAX_WEEKS = 8;
 
@@ -308,14 +308,19 @@ function doLogout() {
     document.getElementById("appLockScreen").style.display = "flex";
     document.getElementById("app-wrapper").style.display = "none";
     document.getElementById("appLockInput").value = "";
+    document.getElementById("appLockInput").disabled = false;
+    document.getElementById("appLockBtn").textContent = "입장하기";
+    document.getElementById("lockSubText").innerHTML = "참여자 전용 공간이에요<br>비밀번호를 입력해주세요";
     setTimeout(() => document.getElementById("appLockInput").focus(), 100);
   }, 1500); // toast 보여주고 1.5초 후 잠금
 }
 
-// 클릭/터치/키 입력 시 활동 시간 갱신
-["click","touchstart","keydown"].forEach(evt => {
-  document.addEventListener(evt, updateActivity, { passive: true });
-});
+// 활동 감지 리스너 - 로그인 성공 후에만 등록
+function registerActivityListeners() {
+  ["click","touchstart","keydown"].forEach(evt => {
+    document.addEventListener(evt, updateActivity, { passive: true });
+  });
+}
 
 // 5분마다 세션 체크
 setInterval(() => {
@@ -836,6 +841,7 @@ function showToast(msg) {
 function checkAppLock() {
   const input = document.getElementById("appLockInput").value.trim();
   if (input === appPasswordFromGAS) {
+    registerActivityListeners();
     updateActivity();
     document.getElementById("appLockScreen").style.display = "none";
     document.getElementById("app-wrapper").style.display = "block";
@@ -869,6 +875,7 @@ async function startApp() {
   }
 
   if (checkSession()) {
+    registerActivityListeners();
     updateActivity();
     document.getElementById("appLockScreen").style.display = "none";
     document.getElementById("app-wrapper").style.display = "block";
@@ -877,12 +884,16 @@ async function startApp() {
       adminLoggedIn = true;
       document.getElementById("adminLock").style.display = "none";
       document.getElementById("adminDashboard").style.display = "block";
+      await loadAdminMemberList();
+      document.getElementById("inputDate").value = todayStr();
     }
     updateWeekUI();
     loadHomeData();
   } else {
     localStorage.removeItem("zj_last_activity");
     localStorage.removeItem("zj_admin_session");
+    const subEl = document.getElementById("lockSubText");
+    if (subEl) subEl.innerHTML = "참여자 전용 공간이에요<br>비밀번호를 입력해주세요";
     document.getElementById("appLockInput").disabled = false;
     const btn = document.getElementById("appLockBtn");
     if (btn) btn.textContent = "입장하기";
