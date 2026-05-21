@@ -12,6 +12,7 @@
       --bg: #f7f5f2; --card: #ffffff; --primary: #6b7c5e; --primary-light: #eef1ea;
       --accent: #c9a96e; --accent-light: #fdf6ec; --text: #2d2d2d; --muted: #999;
       --border: #e8e4de; --danger: #c0392b; --success: #4a7c59; --radius: 16px;
+      --header-h: 57px;
     }
     * { box-sizing: border-box; }
     body { background: #ddd9d3; color: var(--text); font-family: 'Apple SD Gothic Neo','Noto Sans KR',sans-serif; min-height: 100vh; display: flex; justify-content: center; }
@@ -38,14 +39,21 @@
     .stat-box { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 10px; text-align: center; }
     .stat-box .num { font-size: 1.4rem; font-weight: 700; color: var(--primary); }
     .stat-box .lbl { font-size: 0.63rem; color: var(--muted); margin-top: 2px; }
+    /* 4번: 홈 테이블 헤더 고정 */
     .status-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
-    .status-table th { color: var(--muted); font-weight: 600; font-size: 0.68rem; padding: 8px 6px; border-bottom: 1px solid var(--border); text-align: center; position: sticky; top: 0; background: var(--card); z-index: 1; }
+    .status-table th {
+      color: var(--muted); font-weight: 600; font-size: 0.68rem;
+      padding: 8px 6px; border-bottom: 1px solid var(--border);
+      text-align: center;
+      position: sticky; top: var(--header-h); background: var(--card); z-index: 2;
+    }
+    /* 3번: 닉네임 헤더 왼쪽 정렬 */
+    .status-table th:first-child { text-align: left; }
     .status-table td { padding: 10px 6px; border-bottom: 1px solid var(--border); text-align: center; vertical-align: middle; }
     .status-table td:first-child { text-align: left; font-weight: 500; }
     .status-table tr:last-child td { border-bottom: none; }
     .badge-done { background: var(--primary-light); color: var(--primary); padding: 2px 8px; border-radius: 20px; font-size: 0.68rem; font-weight: 600; }
     .badge-no { background: #f0f0f0; color: #ccc; padding: 2px 8px; border-radius: 20px; font-size: 0.68rem; }
-    /* 내 성장 */
     .flow-hero { background: linear-gradient(135deg, var(--primary) 0%, #8a9e7a 100%); color: #fff; border-radius: var(--radius); padding: 22px 20px; margin-bottom: 14px; }
     .flow-hero .label { font-size: 0.68rem; opacity: 0.75; margin-bottom: 8px; }
     .flow-hero .flow-text { font-size: 1rem; font-weight: 600; line-height: 1.6; }
@@ -74,7 +82,6 @@
     .timeline-item:last-child { border-bottom: none; }
     .timeline-date { font-size: 0.72rem; color: var(--muted); min-width: 36px; padding-top: 2px; }
     .timeline-text { font-size: 0.84rem; line-height: 1.5; color: var(--text); }
-    /* 운영자 */
     .form-label { font-size: 0.82rem; font-weight: 600; color: var(--text); margin-bottom: 5px; }
     .form-control, .form-select { border: 1px solid var(--border); border-radius: 10px; font-size: 0.88rem; padding: 10px 12px; background: var(--bg); }
     .form-control:focus, .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(107,124,94,0.12); outline: none; }
@@ -85,9 +92,13 @@
     .inner-tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 16px; }
     .inner-tab { flex: 1; background: none; border: none; padding: 10px; font-size: 0.84rem; color: var(--muted); font-weight: 500; border-bottom: 2px solid transparent; margin-bottom: -2px; cursor: pointer; }
     .inner-tab.active { color: var(--primary); font-weight: 700; border-bottom: 2px solid var(--primary); }
-    /* 운영자 전체흐름 테이블 */
+    /* 5번: 운영자 테이블 헤더 고정 - overflow-x 제거로 sticky 작동 */
     .admin-flow-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
-    .admin-flow-table th { background: var(--primary-light); color: var(--primary); padding: 9px 8px; font-weight: 600; font-size: 0.68rem; text-align: left; position: sticky; top: 0; z-index: 1; }
+    .admin-flow-table th {
+      background: var(--primary-light); color: var(--primary);
+      padding: 9px 8px; font-weight: 600; font-size: 0.68rem; text-align: left;
+      position: sticky; top: var(--header-h); z-index: 2;
+    }
     .admin-flow-table td { padding: 11px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
     .admin-flow-table tr:last-child td { border-bottom: none; }
     .admin-flow-table tr { cursor: pointer; transition: background 0.15s; }
@@ -97,16 +108,13 @@
     .flow-cell { font-size: 0.75rem; color: var(--muted); }
     .emotion-cell { display: flex; flex-wrap: wrap; gap: 4px; }
     .emotion-mini { background: var(--primary-light); color: var(--primary); border-radius: 20px; padding: 2px 8px; font-size: 0.65rem; }
-    /* 운영 메모 */
     .admin-note-area { background: #fffef7; border: 1px dashed var(--accent); border-radius: 10px; padding: 14px; }
     .admin-note-area textarea { border: none; background: transparent; resize: none; width: 100%; font-size: 0.85rem; line-height: 1.6; color: var(--text); outline: none; font-family: inherit; }
     .admin-note-label { font-size: 0.68rem; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
-    /* 로딩 */
     .loading { text-align: center; padding: 32px; color: var(--muted); font-size: 0.85rem; }
     .spinner { width: 26px; height: 26px; border: 3px solid var(--border); border-top: 3px solid var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 10px; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .lock-screen { padding: 48px 20px; text-align: center; }
-    /* 앱 전체 잠금 */
     #appLockScreen {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       background: var(--bg); z-index: 9999;
@@ -121,8 +129,7 @@
       width: 100%; max-width: 280px; text-align: center;
       letter-spacing: 6px; font-size: 1.1rem;
       border: 2px solid var(--border); border-radius: 12px;
-      padding: 14px; background: var(--card); outline: none;
-      margin-bottom: 14px;
+      padding: 14px; background: var(--card); outline: none; margin-bottom: 14px;
     }
     #appLockScreen input:focus { border-color: var(--primary); }
     #appLockScreen button {
@@ -138,7 +145,6 @@
     .screen { display: none; padding: 16px; }
     .screen.active { display: block; }
     .empty-state { text-align: center; padding: 28px; color: var(--muted); font-size: 0.84rem; }
-    /* 스켈레톤 로딩 */
     .skeleton { background: linear-gradient(90deg, #f0ede8 25%, #e8e4de 50%, #f0ede8 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px; }
     @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
     .skeleton-hero { height: 90px; margin-bottom: 14px; border-radius: var(--radius); }
@@ -148,7 +154,6 @@
     .skeleton-line.mid { width: 70%; }
     .skeleton-line.full { width: 100%; }
     .skeleton-tag { height: 28px; width: 60px; border-radius: 20px; display: inline-block; margin-right: 6px; }
-    /* 진행 상태 */
     .progress-bar-wrap { background: var(--border); border-radius: 20px; height: 4px; margin: 8px 0; overflow: hidden; }
     .progress-bar { background: var(--primary); height: 4px; border-radius: 20px; transition: width 0.4s ease; }
     .progress-text { font-size: 0.75rem; color: var(--muted); text-align: center; margin-top: 4px; }
@@ -156,7 +161,6 @@
   </style>
 </head>
 <body>
-<!-- 앱 전체 잠금 화면 -->
 <div id="appLockScreen">
   <div class="lock-logo">🌱</div>
   <div class="lock-title">자존주니</div>
@@ -168,13 +172,11 @@
 </div>
 
 <div id="app-wrapper" style="display:none;">
-
 <div class="app-header">
   <h1>🌱 자존주니</h1>
   <span class="week-chip" id="headerWeekChip"></span>
 </div>
 
-<!-- 홈 -->
 <div id="screen-home" class="screen active">
   <div class="question-card">
     <div class="label">오늘의 알아차림 질문</div>
@@ -196,7 +198,6 @@
   </div>
 </div>
 
-<!-- 내 성장 -->
 <div id="screen-growth" class="screen">
   <div class="card" style="margin-bottom:10px;">
     <div class="card-label">멤버 선택</div>
@@ -212,7 +213,6 @@
   <div id="growthResult"></div>
 </div>
 
-<!-- 운영자 -->
 <div id="screen-admin" class="screen">
   <div id="adminLock">
     <div class="lock-screen">
@@ -228,7 +228,6 @@
       <button class="inner-tab active" id="tab-input" onclick="switchAdminTab('input')">📝 데이터 입력</button>
       <button class="inner-tab" id="tab-analysis" onclick="switchAdminTab('analysis')">🌿 전체 흐름</button>
     </div>
-    <!-- 데이터 입력 -->
     <div id="adminTabInput">
       <div class="card">
         <div class="mb-3"><label class="form-label">날짜</label><input type="date" class="form-control" id="inputDate" /></div>
@@ -239,9 +238,7 @@
         <div id="saveResult" style="text-align:center;margin-top:10px;font-size:0.85rem;"></div>
       </div>
     </div>
-    <!-- 전체 흐름 -->
     <div id="adminTabAnalysis" style="display:none;">
-      <!-- 목록 뷰 -->
       <div id="adminListView">
         <div class="week-selector">
           <button id="adminWkPrev" onclick="changeWeek(-1)"><i class="bi bi-chevron-left"></i></button>
@@ -251,12 +248,11 @@
         <div class="card" style="padding:14px;">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
             <div class="card-label" style="margin-bottom:0;">전체 흐름 — 멤버를 눌러 상세 보기</div>
-            <button onclick="clearAllCache()" style="background:none;border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:0.72rem;color:var(--muted);cursor:pointer;" title="캐시 초기화 후 재분석">🔄 재분석</button>
+            <button onclick="clearAllCache()" style="background:none;border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:0.72rem;color:var(--muted);cursor:pointer;">🔄 재분석</button>
           </div>
           <div id="adminAnalysisArea"><div class="loading"><div class="spinner"></div>불러오는 중...</div></div>
         </div>
       </div>
-      <!-- 상세 뷰 -->
       <div id="adminDetailView" style="display:none;">
         <button class="back-btn" onclick="showAdminList()"><i class="bi bi-arrow-left"></i> 전체 흐름으로</button>
         <div id="adminDetailContent"></div>
@@ -274,11 +270,55 @@
 </div>
 
 <script>
-const GAS_URL = "https://script.google.com/macros/s/AKfycbznL5Ye57L5FqQR1eXye1Qy8SgOTjuxoHqFip8bbViXm7Z7LSHxRPnsYZ6rUadm1i-NGQ/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbyEsbahXc2S_C0JBgtypDcPPrDJxwB91XDSaqdHYq2mDJ386R38DZubBdulrdYNQ0z6/exec";
+const PROGRAM_START = new Date(new Date().getFullYear(), 3, 20);
+const MAX_WEEKS = 8;
+const APP_PASSWORD = "1234";
 
-const PROGRAM_START = new Date(new Date().getFullYear(), 3, 20); // 4월 20일 현재연도
+// =============================================
+// 1번: 자동 로그아웃
+// =============================================
+const TIMEOUT_MEMBER = 30 * 60 * 1000;  // 30분
+const TIMEOUT_ADMIN  = 60 * 60 * 1000;  // 60분
+const LS_LAST_ACTIVE = 'zj_last_active';
 
-// 오늘의 질문 - GAS 호출 없이 클라이언트에서 직접 계산
+function updateLastActive() {
+  localStorage.setItem(LS_LAST_ACTIVE, Date.now().toString());
+}
+function checkTimeout() {
+  const last = parseInt(localStorage.getItem(LS_LAST_ACTIVE) || '0');
+  if (!last) return true;
+  const timeout = adminLoggedIn ? TIMEOUT_ADMIN : TIMEOUT_MEMBER;
+  return (Date.now() - last) > timeout;
+}
+function lockApp() {
+  adminLoggedIn = false;
+  localStorage.removeItem(LS_LAST_ACTIVE);
+  // 운영자 대시보드 잠금 상태로 초기화
+  document.getElementById("adminLock").style.display = "block";
+  document.getElementById("adminDashboard").style.display = "none";
+  document.getElementById("adminPwInput").value = "";
+  document.getElementById("adminPwError").textContent = "";
+  // 앱 잠금 화면 표시
+  document.getElementById("appLockScreen").style.display = "flex";
+  document.getElementById("app-wrapper").style.display = "none";
+  document.getElementById("appLockInput").value = "";
+  setTimeout(() => document.getElementById("appLockInput").focus(), 100);
+}
+// 활동 감지 → 타이머 리셋
+['click','touchstart','keydown'].forEach(ev =>
+  document.addEventListener(ev, updateLastActive, { passive: true })
+);
+// 1분마다 타임아웃 체크
+setInterval(() => {
+  if (document.getElementById("app-wrapper").style.display !== "none") {
+    if (checkTimeout()) lockApp();
+  }
+}, 60 * 1000);
+
+// =============================================
+// 오늘의 질문 (로컬)
+// =============================================
 const DAILY_QUESTIONS = {
   "05-03":"지금 나는 어떤 상태인가요?","05-04":"오늘 내 몸은 어떤 느낌인가요?","05-05":"오늘 가장 먼저 알아차린 내 상태는 무엇이었나요?",
   "05-06":"지금 나는 쉬고 싶은 상태인가요, 계속 가고 싶은 상태인가요?","05-07":"오늘 내 마음은 편안한가요, 바쁜가요?","05-08":"오늘 나는 어떤 감정으로 움직이고 있었나요?",
@@ -297,21 +337,21 @@ const DAILY_QUESTIONS = {
   "06-14":"지금 나는 나를 믿고 있나요?","06-15":"오늘 나는 어떤 상태를 인정하고 있나요?","06-16":"지금 나는 무엇을 받아들이고 있나요?",
   "06-17":"오늘 나는 나에게 어떤 말을 해주고 있나요?","06-18":"지금 나는 어떤 나로 남고 싶나요?"
 };
-
 function getTodayQuestionLocal() {
   const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
   const key = String(now.getMonth()+1).padStart(2,"0") + "-" + String(now.getDate()).padStart(2,"0");
   return DAILY_QUESTIONS[key] || "지금 나는 어떤 상태인가요?";
 }
-const MAX_WEEKS = 8;
 
+// =============================================
+// 상태 변수
+// =============================================
 let currentWeek = getDefaultWeek();
 let membersCache = [];
 let adminLoggedIn = false;
 let currentAdminTab = "input";
-let adminAnalysisData = []; // 전체 분석 결과 캐시
+let adminAnalysisData = [];
 
-// localStorage 캐시 (페이지 새로고침해도 유지)
 const CACHE_PREFIX = 'zj_insight_';
 function getLocalCache(key) {
   try { const d = localStorage.getItem(CACHE_PREFIX + key); return d ? JSON.parse(d) : null; }
@@ -327,14 +367,14 @@ function setLocalCache(key, data) {
 // =============================================
 function getDefaultWeek() {
   const now = new Date();
-  const diff = now - PROGRAM_START;
+  const diff = now - new Date(now.getFullYear(), 3, 20);
   if (diff < 0) return 1;
-  const w = Math.floor(diff / (7 * 24 * 60 * 60 * 1000)) + 1;
+  const w = Math.floor(diff / (7*24*60*60*1000)) + 1;
   return Math.min(Math.max(w, 1), MAX_WEEKS);
 }
 function getWeekMonday(w) {
   const d = new Date(PROGRAM_START);
-  d.setDate(d.getDate() + (w - 1) * 7);
+  d.setDate(d.getDate() + (w-1)*7);
   return d;
 }
 function weekMondayStr(w) {
@@ -344,36 +384,31 @@ function weekMondayStr(w) {
 function weekNumText(w) { return w + "주차"; }
 function weekDateText(w) {
   const s = getWeekMonday(w);
-  const e = new Date(s); e.setDate(s.getDate() + 6);
-  return (s.getMonth()+1) + "/" + s.getDate() + " ~ " + (e.getMonth()+1) + "/" + e.getDate();
+  const e = new Date(s); e.setDate(s.getDate()+6);
+  return (s.getMonth()+1)+"/"+s.getDate()+" ~ "+(e.getMonth()+1)+"/"+e.getDate();
 }
 function getWeekNumFromDate(dateStr) {
   const d = new Date(dateStr);
   const diff = d - PROGRAM_START;
   if (diff < 0) return 1;
-  const w = Math.floor(diff / (7 * 24 * 60 * 60 * 1000)) + 1;
+  const w = Math.floor(diff / (7*24*60*60*1000)) + 1;
   return Math.min(Math.max(w, 1), MAX_WEEKS);
 }
-
 function todayStr() {
   const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
-  return now.getFullYear() + "-" + String(now.getMonth()+1).padStart(2,"0") + "-" + String(now.getDate()).padStart(2,"0");
+  return now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0")+"-"+String(now.getDate()).padStart(2,"0");
 }
+
+// 2번: changeWeek - 캐시 삭제 제거, 있으면 즉시 표시 후 백그라운드 갱신
 function changeWeek(dir) {
   const next = currentWeek + dir;
   if (next < 1 || next > MAX_WEEKS) return;
   currentWeek = next;
   updateWeekUI();
   const active = document.querySelector('.screen.active').id;
-  if (active === 'screen-home') {
-    localStorage.removeItem(CACHE_PREFIX + "home_status_" + currentWeek);
-    loadHomeData();
-  }
+  if (active === 'screen-home') loadHomeData();
   if (active === 'screen-growth' && document.getElementById('growthMemberSelect').value) loadGrowthInsight();
-  if (active === 'screen-admin' && currentAdminTab === 'analysis') {
-    adminAnalysisData = [];
-    loadAdminAnalysis();
-  }
+  if (active === 'screen-admin' && currentAdminTab === 'analysis') { adminAnalysisData = []; loadAdminAnalysis(); }
 }
 function updateWeekUI() {
   const num = weekNumText(currentWeek), date = weekDateText(currentWeek);
@@ -421,25 +456,18 @@ function switchScreen(name) {
 // 홈
 // =============================================
 async function loadHomeData() {
-  // 오늘의 질문: GAS 호출 없이 즉시 표시
   document.getElementById("todayQuestion").textContent = getTodayQuestionLocal();
-
-  // 홈 상태: localStorage 캐시 확인
   const homeCacheKey = "home_status_" + currentWeek;
   const homeCached = getLocalCache(homeCacheKey);
   if (homeCached) {
     renderStats(homeCached.stats);
     renderMemberTable(homeCached.list);
-    // 백그라운드에서 최신 데이터 갱신 (화면은 이미 표시됨)
-    refreshHomeData(homeCacheKey);
+    refreshHomeData(homeCacheKey); // 백그라운드 갱신
     return;
   }
-
-  // 캐시 없으면 스켈레톤 표시 후 로딩
   document.getElementById("memberStatusArea").innerHTML = '<div class="loading"><div class="spinner"></div>멤버 현황 불러오는 중...</div>';
   await refreshHomeData(homeCacheKey);
 }
-
 async function refreshHomeData(homeCacheKey) {
   try {
     const statusRes = await gasGet({ action: "getFullStatus", week: weekMondayStr(currentWeek) });
@@ -447,7 +475,7 @@ async function refreshHomeData(homeCacheKey) {
     renderStats(statusRes.stats);
     renderMemberTable(statusRes.list);
   } catch(e) {
-    document.getElementById("memberStatusArea").innerHTML = '<div style="color:var(--danger);text-align:center;padding:20px;">데이터를 불러오지 못했습니다.<br><small>' + e.message + '</small></div>';
+    document.getElementById("memberStatusArea").innerHTML = '<div style="color:var(--danger);text-align:center;padding:20px;">데이터를 불러오지 못했습니다.<br><small>'+e.message+'</small></div>';
   }
 }
 function renderStats(s) {
@@ -459,7 +487,6 @@ function renderStats(s) {
 }
 function renderMemberTable(list) {
   if (!list || !list.length) { document.getElementById("memberStatusArea").innerHTML = '<div class="empty-state">멤버 데이터가 없습니다.</div>'; return; }
-  // 8번: 현재 주차일 때만 "오늘" 컬럼 표시
   const isCurrentWeek = (currentWeek === getDefaultWeek());
   const rows = list.map(m => `<tr>
     <td>${m.name}</td>
@@ -489,7 +516,6 @@ async function loadGrowthInsight() {
   const name = document.getElementById("growthMemberSelect").value;
   if (!name) { document.getElementById("growthResult").innerHTML = ""; return; }
   const cacheKey = name + "_" + currentWeek;
-  // localStorage 캐시 확인 → 즉시 렌더링 (로딩 없음)
   const cached = getLocalCache(cacheKey);
   if (cached) { renderInsight(cached, "growthResult"); return; }
   renderSkeleton("growthResult");
@@ -498,93 +524,62 @@ async function loadGrowthInsight() {
     setLocalCache(cacheKey, data);
     renderInsight(data, "growthResult");
   } catch(e) {
-    document.getElementById("growthResult").innerHTML = '<div style="color:var(--danger);padding:16px;">오류: ' + e.message + '</div>';
+    document.getElementById("growthResult").innerHTML = '<div style="color:var(--danger);padding:16px;">오류: '+e.message+'</div>';
   }
 }
-
 function safeArr(v) { if (!v) return []; return Array.isArray(v) ? v : [v]; }
 
 function renderInsight(d, containerId, isAdmin = false) {
   if (!d) { document.getElementById(containerId).innerHTML = '<div class="empty-state">데이터가 없습니다.</div>'; return; }
-  const srcMap = { ai: "AI 분석", cached: "🗂 저장된 분석", keyword: "키워드 분석" };
-  const srcClass = { ai: "ai", cached: "cached", keyword: "keyword" };
-  const sourceBadge = d.source && d.source !== "none" ? `<span class="source-badge ${srcClass[d.source] || 'keyword'}">${srcMap[d.source] || ""}</span>` : "";
-
-  const flowHtml = `<div class="flow-hero"><div class="label">🌊 이번 주 흐름</div><div class="flow-text">${d.weekly_flow_summary || "이번 주 흐름이 아직 이어지지 않았어요."}</div></div>`;
-
+  const srcMap = { ai:"AI 분석", cached:"🗂 저장된 분석", keyword:"키워드 분석" };
+  const srcClass = { ai:"ai", cached:"cached", keyword:"keyword" };
+  const sourceBadge = d.source && d.source !== "none" ? `<span class="source-badge ${srcClass[d.source]||'keyword'}">${srcMap[d.source]||""}</span>` : "";
+  const flowHtml = `<div class="flow-hero"><div class="label">🌊 이번 주 흐름</div><div class="flow-text">${d.weekly_flow_summary||"이번 주 흐름이 아직 이어지지 않았어요."}</div></div>`;
   const emotions = safeArr(d.emotion_keywords).filter(Boolean);
-  const emotionHtml = emotions.length ? emotions.map(e => `<span class="tag">${e}</span>`).join("") : `<span class="tag ghost">기록을 기다리고 있어요</span>`;
-
+  const emotionHtml = emotions.length ? emotions.map(e=>`<span class="tag">${e}</span>`).join("") : `<span class="tag ghost">기록을 기다리고 있어요</span>`;
   const selfcare = safeArr(d.selfcare_patterns).filter(Boolean);
-  const selfcareHtml = selfcare.length ? selfcare.map(s => `<span class="tag soft">${s}</span>`).join("") : `<span class="tag ghost">기록을 기다리고 있어요</span>`;
-
+  const selfcareHtml = selfcare.length ? selfcare.map(s=>`<span class="tag soft">${s}</span>`).join("") : `<span class="tag ghost">기록을 기다리고 있어요</span>`;
   const talks = safeArr(d.self_talk_patterns).filter(Boolean);
-  const talkHtml = talks.length ? talks.map(t => `<div class="self-talk-item">" ${t} "</div>`).join("") : `<div class="self-talk-item" style="color:#bbb;font-style:normal;">기록을 기다리고 있어요</div>`;
-
+  const talkHtml = talks.length ? talks.map(t=>`<div class="self-talk-item">" ${t} "</div>`).join("") : `<div class="self-talk-item" style="color:#bbb;font-style:normal;">기록을 기다리고 있어요</div>`;
   const innerHtml = d.weekly_inner_patterns ? `<div class="inner-pattern-text">${d.weekly_inner_patterns}</div>` : `<div class="inner-pattern-text" style="color:#bbb;">주간 글쓰기 기록을 기다리고 있어요.</div>`;
-
   const bg = d.background || {};
-  const initialHtml = (bg.reason || bg.status || bg.goal) ? `
+  const initialHtml = (bg.reason||bg.status||bg.goal) ? `
     <div style="margin-bottom:12px;">
       <button class="initial-toggle" onclick="toggleInitial(this)">
         <span>🌱 처음의 나</span><i class="bi bi-chevron-down"></i>
       </button>
       <div class="collapse" id="initialBody_${containerId}">
         <div class="initial-body">
-          ${bg.reason ? `<div class="initial-row"><span class="initial-label">신청 이유</span><span class="initial-val">${bg.reason}</span></div>` : ""}
-          ${bg.status ? `<div class="initial-row"><span class="initial-label">시작 당시</span><span class="initial-val">${bg.status}</span></div>` : ""}
-          ${bg.goal ? `<div class="initial-row"><span class="initial-label">챙기고 싶은 모습</span><span class="initial-val">${bg.goal}</span></div>` : ""}
+          ${bg.reason?`<div class="initial-row"><span class="initial-label">신청 이유</span><span class="initial-val">${bg.reason}</span></div>`:""}
+          ${bg.status?`<div class="initial-row"><span class="initial-label">시작 당시</span><span class="initial-val">${bg.status}</span></div>`:""}
+          ${bg.goal?`<div class="initial-row"><span class="initial-label">챙기고 싶은 모습</span><span class="initial-val">${bg.goal}</span></div>`:""}
         </div>
       </div>
     </div>` : "";
-
   const coachingHtml = d.coaching ? `<div class="coaching-card">💚 ${d.coaching}</div>` : "";
-
-  const tl = (d.timeline || []).map(t => `<div class="timeline-item"><div class="timeline-date">${t.date}</div><div class="timeline-text">${t.text}</div></div>`).join("") || '<div class="empty-state">이번 주 기록이 없어요.</div>';
-
-  // 운영자 메모 (운영자 뷰에서만)
+  const tl = (d.timeline||[]).map(t=>`<div class="timeline-item"><div class="timeline-date">${t.date}</div><div class="timeline-text">${t.text}</div></div>`).join("") || '<div class="empty-state">이번 주 기록이 없어요.</div>';
   const adminMemoHtml = isAdmin ? `
     <div class="section-card" style="margin-top:4px;">
       <div class="section-title"><i class="bi bi-pencil-square"></i> 운영 메모 <span style="font-size:0.65rem;color:var(--muted);font-weight:400;">(운영자 전용)</span></div>
       <div class="admin-note-area">
         <div class="admin-note-label">관찰 메모</div>
-        <textarea id="adminNoteText_${d.name}" rows="3" placeholder="흐름 관찰 메모를 남겨보세요...">${d.admin_note || ""}</textarea>
+        <textarea id="adminNoteText_${d.name}" rows="3" placeholder="흐름 관찰 메모를 남겨보세요...">${d.admin_note||""}</textarea>
       </div>
       <button onclick="saveAdminNote('${d.name}')" style="margin-top:10px;background:var(--primary-light);color:var(--primary);border:none;border-radius:8px;padding:8px 16px;font-size:0.82rem;font-weight:600;cursor:pointer;">메모 저장</button>
       <span id="noteSaveResult_${d.name}" style="font-size:0.78rem;margin-left:8px;color:var(--success);"></span>
     </div>` : "";
-
   document.getElementById(containerId).innerHTML = `
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-      <div style="font-weight:700;font-size:1rem;">${d.name}</div>
-      ${sourceBadge}
+      <div style="font-weight:700;font-size:1rem;">${d.name}</div>${sourceBadge}
     </div>
     ${flowHtml}
-    <div class="section-card">
-      <div class="section-title"><i class="bi bi-heart-pulse"></i> 자주 느낀 상태</div>
-      <div class="tag-row">${emotionHtml}</div>
-    </div>
-    <div class="section-card">
-      <div class="section-title"><i class="bi bi-cup-hot"></i> 나를 돌본 방식</div>
-      <div class="tag-row">${selfcareHtml}</div>
-    </div>
-    <div class="section-card">
-      <div class="section-title"><i class="bi bi-chat-quote"></i> 나에게 자주 건넨 말</div>
-      <div class="self-talk-list">${talkHtml}</div>
-    </div>
-    <div class="section-card">
-      <div class="section-title"><i class="bi bi-journal-text"></i> 내가 자주 반복하는 흐름 <span style="font-size:0.65rem;font-weight:400;color:var(--muted);">(주간 글쓰기 분석)</span></div>
-      ${innerHtml}
-    </div>
-    ${initialHtml}
-    ${coachingHtml}
-    ${adminMemoHtml}
-    <div class="card" style="padding:14px;margin-top:14px;">
-      <div class="card-label">기록 타임라인</div>
-      ${tl}
-    </div>`;
+    <div class="section-card"><div class="section-title"><i class="bi bi-heart-pulse"></i> 자주 느낀 상태</div><div class="tag-row">${emotionHtml}</div></div>
+    <div class="section-card"><div class="section-title"><i class="bi bi-cup-hot"></i> 나를 돌본 방식</div><div class="tag-row">${selfcareHtml}</div></div>
+    <div class="section-card"><div class="section-title"><i class="bi bi-chat-quote"></i> 나에게 자주 건넨 말</div><div class="self-talk-list">${talkHtml}</div></div>
+    <div class="section-card"><div class="section-title"><i class="bi bi-journal-text"></i> 내가 자주 반복하는 흐름 <span style="font-size:0.65rem;font-weight:400;color:var(--muted);">(주간 글쓰기 분석)</span></div>${innerHtml}</div>
+    ${initialHtml}${coachingHtml}${adminMemoHtml}
+    <div class="card" style="padding:14px;margin-top:14px;"><div class="card-label">기록 타임라인</div>${tl}</div>`;
 }
-
 function toggleInitial(btn) {
   const id = btn.nextElementSibling.id;
   const body = document.getElementById(id);
@@ -602,12 +597,13 @@ async function doAdminLogin() {
     const res = await gasPost({ action: "verifyAdmin", password: pw });
     if (res.ok) {
       adminLoggedIn = true;
+      updateLastActive(); // 운영자 로그인 시 타이머 시작
       document.getElementById("adminLock").style.display = "none";
       document.getElementById("adminDashboard").style.display = "block";
       await loadAdminMemberList();
       document.getElementById("inputDate").value = todayStr();
     } else { document.getElementById("adminPwError").textContent = "비밀번호가 올바르지 않습니다."; }
-  } catch(e) { document.getElementById("adminPwError").textContent = "오류: " + e.message; }
+  } catch(e) { document.getElementById("adminPwError").textContent = "오류: "+e.message; }
 }
 async function loadAdminMemberList() {
   if (!membersCache.length) membersCache = await gasGet({ action: "getMembers" });
@@ -624,59 +620,50 @@ async function doSaveAuth() {
     result.textContent = res.message;
     result.style.color = res.message.startsWith("✅") ? "var(--success)" : "var(--danger)";
     if (res.message.startsWith("✅")) {
-      // 해당 멤버+주차 localStorage 캐시 삭제 → 다음 분석 시 최신 데이터 반영
       const savedWeek = getWeekNumFromDate(formData.date);
       localStorage.removeItem(CACHE_PREFIX + formData.memberId + "_" + savedWeek);
       localStorage.removeItem(CACHE_PREFIX + "admin_all_" + savedWeek);
-      adminAnalysisData = []; // 운영자 메모리 캐시도 초기화
+      localStorage.removeItem(CACHE_PREFIX + "home_status_" + savedWeek); // 홈 캐시도 삭제
+      adminAnalysisData = [];
       document.getElementById("inputSelfRespect").value = "";
       document.getElementById("inputWeeklyWriting").value = "";
       document.getElementById("inputMember").value = "";
     }
-  } catch(e) { result.textContent = "❌ 저장 실패: " + e.message; result.style.color = "var(--danger)"; }
+  } catch(e) { result.textContent = "❌ 저장 실패: "+e.message; result.style.color = "var(--danger)"; }
   finally { btn.disabled = false; btn.textContent = "저장하기"; }
 }
 function switchAdminTab(tab) {
   currentAdminTab = tab;
-  document.getElementById("tab-input").classList.toggle("active", tab === "input");
-  document.getElementById("tab-analysis").classList.toggle("active", tab === "analysis");
-  document.getElementById("adminTabInput").style.display = tab === "input" ? "block" : "none";
-  document.getElementById("adminTabAnalysis").style.display = tab === "analysis" ? "block" : "none";
+  document.getElementById("tab-input").classList.toggle("active", tab==="input");
+  document.getElementById("tab-analysis").classList.toggle("active", tab==="analysis");
+  document.getElementById("adminTabInput").style.display = tab==="input" ? "block" : "none";
+  document.getElementById("adminTabAnalysis").style.display = tab==="analysis" ? "block" : "none";
   if (tab === "analysis") loadAdminAnalysis();
 }
 async function loadAdminAnalysis() {
   if (adminAnalysisData.length > 0) { renderAdminTable(adminAnalysisData); return; }
-  // localStorage 캐시 확인 → 즉시 표시
   const adminCacheKey = "admin_all_" + currentWeek;
   const adminCached = getLocalCache(adminCacheKey);
   if (adminCached) { adminAnalysisData = adminCached; renderAdminTable(adminCached); return; }
-
-  // 멤버별 순차 렌더링 - 완료된 멤버부터 하나씩 표시
   const members = membersCache.length > 0 ? membersCache : await gasGet({ action: "getMembers" });
   if (!membersCache.length) membersCache = members;
   const total = members.length;
   const results = [];
   const area = document.getElementById("adminAnalysisArea");
-
-  // 초기 스켈레톤 테이블
   area.innerHTML = `
     <div class="progress-bar-wrap"><div class="progress-bar" id="adminProgressBar" style="width:0%"></div></div>
     <div class="progress-text" id="adminProgressText">분석 준비 중...</div>
     <div id="adminTableBody" style="margin-top:12px;"></div>`;
-
   for (let i = 0; i < total; i++) {
     const m = members[i];
-    const pct = Math.round(((i + 1) / total) * 100);
+    const pct = Math.round(((i+1)/total)*100);
     document.getElementById("adminProgressBar").style.width = pct + "%";
-    document.getElementById("adminProgressText").textContent = m.name + " 분석 중... (" + (i+1) + "/" + total + "명)";
-
-    // localStorage에 개별 캐시 있으면 즉시 사용
+    document.getElementById("adminProgressText").textContent = m.name + " 분석 중... ("+(i+1)+"/"+total+"명)";
     const memberCacheKey = m.name + "_" + currentWeek;
     const memberCached = getLocalCache(memberCacheKey);
     let data;
-    if (memberCached) {
-      data = memberCached;
-    } else {
+    if (memberCached) { data = memberCached; }
+    else {
       try {
         data = await gasGet({ action: "getMemberInsight", name: m.name, week: weekMondayStr(currentWeek) });
         setLocalCache(memberCacheKey, data);
@@ -685,29 +672,22 @@ async function loadAdminAnalysis() {
       }
     }
     results.push(data);
-    // 완료된 만큼 즉시 테이블 업데이트
     renderAdminTablePartial(results, "adminTableBody");
   }
-
   adminAnalysisData = results;
   setLocalCache(adminCacheKey, results);
-  // 진행바 숨기고 최종 테이블로
   area.innerHTML = "";
   renderAdminTable(results);
 }
-
 function renderAdminTablePartial(arr, containerId) {
-  const rows = arr.map((d, i) => {
-    const emotions = safeArr(d.emotion_keywords).filter(Boolean).slice(0,3).map(e => `<span class="emotion-mini">${e}</span>`).join("");
-    const flow = d.weekly_flow || "흐름 이어가는 중";
-    const change = d.change_direction || "-";
-    const status = d.flow_status || "🟡 흐름 흔들림";
+  const rows = arr.map((d,i) => {
+    const emotions = safeArr(d.emotion_keywords).filter(Boolean).slice(0,3).map(e=>`<span class="emotion-mini">${e}</span>`).join("");
     return `<tr onclick="showAdminDetail(${i})">
       <td class="member-name-cell">${d.name}</td>
-      <td class="flow-cell">${flow}</td>
-      <td><div class="emotion-cell">${emotions || "-"}</div></td>
-      <td class="flow-cell">${change}</td>
-      <td class="flow-status-badge">${status}</td>
+      <td class="flow-cell">${d.weekly_flow||"흐름 이어가는 중"}</td>
+      <td><div class="emotion-cell">${emotions||"-"}</div></td>
+      <td class="flow-cell">${d.change_direction||"-"}</td>
+      <td class="flow-status-badge">${d.flow_status||"🟡 흐름 흔들림"}</td>
     </tr>`;
   }).join("");
   const el = document.getElementById(containerId);
@@ -715,37 +695,30 @@ function renderAdminTablePartial(arr, containerId) {
 }
 function renderAdminTable(arr) {
   if (!arr || !arr.length) { document.getElementById("adminAnalysisArea").innerHTML = '<div class="empty-state">데이터 없음</div>'; return; }
-  const rows = arr.map((d, i) => {
-    const emotions = safeArr(d.emotion_keywords).filter(Boolean).slice(0, 3).map(e => `<span class="emotion-mini">${e}</span>`).join("");
-    const flow = d.weekly_flow || "흐름 이어가는 중";
-    const change = d.change_direction || "-";
-    const status = d.flow_status || "🟡 흐름 흔들림";
+  const rows = arr.map((d,i) => {
+    const emotions = safeArr(d.emotion_keywords).filter(Boolean).slice(0,3).map(e=>`<span class="emotion-mini">${e}</span>`).join("");
     return `<tr onclick="showAdminDetail(${i})">
       <td class="member-name-cell">${d.name}</td>
-      <td class="flow-cell">${flow}</td>
-      <td><div class="emotion-cell">${emotions || "-"}</div></td>
-      <td class="flow-cell">${change}</td>
-      <td class="flow-status-badge">${status}</td>
+      <td class="flow-cell">${d.weekly_flow||"흐름 이어가는 중"}</td>
+      <td><div class="emotion-cell">${emotions||"-"}</div></td>
+      <td class="flow-cell">${d.change_direction||"-"}</td>
+      <td class="flow-status-badge">${d.flow_status||"🟡 흐름 흔들림"}</td>
     </tr>`;
   }).join("");
   document.getElementById("adminAnalysisArea").innerHTML = `
-    <div style="overflow-x:auto;">
-      <table class="admin-flow-table">
-        <thead><tr><th>멤버</th><th>이번 주 흐름</th><th>느낀 상태</th><th>변화 방향</th><th>흐름 상태</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-    </div>`;
+    <table class="admin-flow-table">
+      <thead><tr><th>멤버</th><th>이번 주 흐름</th><th>느낀 상태</th><th>변화 방향</th><th>흐름 상태</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
 }
 async function showAdminDetail(idx) {
   const d = adminAnalysisData[idx];
   if (!d) return;
   document.getElementById("adminListView").style.display = "none";
   document.getElementById("adminDetailView").style.display = "block";
-  // localStorage 캐시 확인 → 즉시 표시
   const cacheKey = d.name + "_" + currentWeek;
   const cached = getLocalCache(cacheKey);
   const detail = cached || d;
-  // 운영 메모 로드
   try {
     const noteRes = await gasGet({ action: "getAdminNote", name: d.name });
     detail.admin_note = noteRes.note || "";
@@ -757,58 +730,37 @@ function showAdminList() {
   document.getElementById("adminListView").style.display = "block";
 }
 async function saveAdminNote(name) {
-  const note = document.getElementById("adminNoteText_" + name).value;
-  const resultEl = document.getElementById("noteSaveResult_" + name);
+  const note = document.getElementById("adminNoteText_"+name).value;
+  const resultEl = document.getElementById("noteSaveResult_"+name);
   try {
     await gasPost({ action: "saveAdminNote", name, note });
     resultEl.textContent = "저장됨 ✓";
     setTimeout(() => { resultEl.textContent = ""; }, 2000);
   } catch(e) { resultEl.textContent = "오류"; resultEl.style.color = "var(--danger)"; }
 }
-
 async function clearAllCache() {
   if (!confirm(currentWeek + "주차 캐시를 초기화하고 다시 분석할까요?")) return;
   try {
-    // GAS: 현재 주차 캐시만 삭제
     await gasGet({ action: "clearWeekCache", week: weekMondayStr(currentWeek) });
-    // localStorage: 현재 주차 관련 캐시만 삭제
     const weekKey = "_" + currentWeek;
     Object.keys(localStorage).forEach(k => {
       if (k.startsWith(CACHE_PREFIX) && k.includes(weekKey)) localStorage.removeItem(k);
     });
     localStorage.removeItem(CACHE_PREFIX + "admin_all_" + currentWeek);
     adminAnalysisData = [];
-    // 3번: 화면도 목록으로 초기화
     showAdminList();
     document.getElementById("adminAnalysisArea").innerHTML = '<div class="loading"><div class="spinner"></div>다시 분석 중...</div>';
-    showToast("✅ " + currentWeek + "주차 재분석 시작!");
+    showToast("✅ "+currentWeek+"주차 재분석 시작!");
     await loadAdminAnalysis();
-  } catch(e) {
-    showToast("❌ 오류: " + e.message);
-  }
+  } catch(e) { showToast("❌ 오류: "+e.message); }
 }
-
 function renderSkeleton(containerId) {
   document.getElementById(containerId).innerHTML = `
     <div class="skeleton skeleton-hero"></div>
-    <div class="skeleton-card">
-      <div class="skeleton skeleton-line short" style="margin-bottom:12px;"></div>
-      <div class="skeleton skeleton-tag"></div>
-      <div class="skeleton skeleton-tag"></div>
-      <div class="skeleton skeleton-tag"></div>
-    </div>
-    <div class="skeleton-card">
-      <div class="skeleton skeleton-line short" style="margin-bottom:12px;"></div>
-      <div class="skeleton skeleton-tag"></div>
-      <div class="skeleton skeleton-tag"></div>
-    </div>
-    <div class="skeleton-card">
-      <div class="skeleton skeleton-line short" style="margin-bottom:10px;"></div>
-      <div class="skeleton skeleton-line full"></div>
-      <div class="skeleton skeleton-line mid"></div>
-    </div>`;
+    <div class="skeleton-card"><div class="skeleton skeleton-line short" style="margin-bottom:12px;"></div><div class="skeleton skeleton-tag"></div><div class="skeleton skeleton-tag"></div><div class="skeleton skeleton-tag"></div></div>
+    <div class="skeleton-card"><div class="skeleton skeleton-line short" style="margin-bottom:12px;"></div><div class="skeleton skeleton-tag"></div><div class="skeleton skeleton-tag"></div></div>
+    <div class="skeleton-card"><div class="skeleton skeleton-line short" style="margin-bottom:10px;"></div><div class="skeleton skeleton-line full"></div><div class="skeleton skeleton-line mid"></div></div>`;
 }
-
 function showToast(msg) {
   const el = document.getElementById("toastMsg");
   el.textContent = msg; el.classList.add("show");
@@ -816,14 +768,12 @@ function showToast(msg) {
 }
 
 // =============================================
-// 앱 전체 비밀번호
+// 앱 비밀번호 잠금
 // =============================================
-const APP_PASSWORD = "1234"; // 여기서 비밀번호 변경
-
 function checkAppLock() {
   const input = document.getElementById("appLockInput").value.trim();
   if (input === APP_PASSWORD) {
-    localStorage.setItem("zj_app_unlocked", "1");
+    updateLastActive(); // 타임스탬프 저장
     document.getElementById("appLockScreen").style.display = "none";
     document.getElementById("app-wrapper").style.display = "block";
     updateWeekUI();
@@ -838,17 +788,15 @@ function checkAppLock() {
 }
 
 // 초기화
-if (localStorage.getItem("zj_app_unlocked") === "1") {
-  // 이미 인증됨 → 바로 입장
+if (localStorage.getItem(LS_LAST_ACTIVE) && !checkTimeout()) {
+  updateLastActive();
   document.getElementById("appLockScreen").style.display = "none";
   document.getElementById("app-wrapper").style.display = "block";
   updateWeekUI();
   loadHomeData();
 } else {
-  // 비밀번호 화면 표시
   setTimeout(() => document.getElementById("appLockInput").focus(), 100);
 }
-
 </script>
 </body>
 </html>
