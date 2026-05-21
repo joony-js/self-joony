@@ -143,8 +143,8 @@
   <div class="lock-title">자존주니</div>
   <div class="lock-sub">참여자 전용 공간이에요</div>
   <input type="password" id="appLockInput" placeholder="••••••" maxlength="20"
-    onkeydown="if(event.key==='Enter') checkAppLock()" />
-  <button onclick="checkAppLock()">들어가기</button>
+    onkeydown="if(event.key==='Enter') checkAppLock()" disabled />
+  <button onclick="checkAppLock()" id="appLockBtn">불러오는 중...</button>
   <div class="lock-error" id="appLockError"></div>
 </div>
 
@@ -214,6 +214,24 @@
         <button class="btn-primary-custom" id="saveBtn" onclick="doSaveAuth()">저장하기</button>
         <div id="saveResult" style="text-align:center;margin-top:10px;font-size:0.85rem;"></div>
       </div>
+      <!-- 비밀번호 변경 섹션 -->
+      <div class="card" style="margin-top:4px;">
+        <div class="card-label">비밀번호 변경</div>
+        <div class="mb-3">
+          <label class="form-label">현재 운영자 비밀번호 <span style="color:var(--danger);font-weight:400;">*확인 필수</span></label>
+          <input type="password" class="form-control" id="currentAdminPassword" placeholder="현재 운영자 비밀번호 입력" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">새 앱 비밀번호 <span style="color:var(--muted);font-weight:400;">(멤버 공유용, 비워두면 유지)</span></label>
+          <input type="password" class="form-control" id="newAppPassword" placeholder="새 앱 비밀번호 입력" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">새 운영자 비밀번호 <span style="color:var(--muted);font-weight:400;">(비워두면 유지)</span></label>
+          <input type="password" class="form-control" id="newAdminPassword" placeholder="새 운영자 비밀번호 입력" />
+        </div>
+        <button onclick="savePasswordChanges()" style="background:var(--primary-light);color:var(--primary);border:1px solid var(--primary);border-radius:10px;padding:10px;width:100%;font-size:0.88rem;font-weight:600;cursor:pointer;">비밀번호 저장</button>
+        <div id="pwChangeResult" style="text-align:center;margin-top:8px;font-size:0.82rem;"></div>
+      </div>
     </div>
     <div id="adminTabAnalysis" style="display:none;">
       <div id="adminListView">
@@ -247,8 +265,10 @@
 </div>
 
 <script>
-const GAS_URL = "https://script.google.com/macros/s/AKfycbznL5Ye57L5FqQR1eXye1Qy8SgOTjuxoHqFip8bbViXm7Z7LSHxRPnsYZ6rUadm1i-NGQ/exec";
-const APP_PASSWORD = "1234";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbxNdsFxUtExUEiJKyShop2VPquGh69uS9fsoS8vIfA0sItCdEvFP4Gd-xfxX44Y2zvSIA/exec";
+// 1번: 비밀번호는 GAS Settings 시트에서 받아옴
+let appPasswordFromGAS = "1234";
+let adminPasswordFromGAS = "1234";
 const PROGRAM_START = new Date(new Date().getFullYear(), 3, 20);
 const MAX_WEEKS = 8;
 
@@ -273,18 +293,23 @@ function checkSession() {
 }
 
 function doLogout() {
-  localStorage.removeItem("zj_last_activity");
-  adminLoggedIn = false;
+  // 4번: 잠금 전 토스트 메시지
+  showToast("오랫동안 자리를 비우셔서 잠금되었어요 🔒");
+  setTimeout(() => {
+    localStorage.removeItem("zj_last_activity");
+    localStorage.removeItem("zj_admin_session");
+    adminLoggedIn = false;
   // 운영자 대시보드 잠금 상태로 초기화
   document.getElementById("adminLock").style.display = "block";
   document.getElementById("adminDashboard").style.display = "none";
   document.getElementById("adminPwInput").value = "";
   document.getElementById("adminPwError").textContent = "";
-  // 앱 잠금 화면으로
-  document.getElementById("appLockScreen").style.display = "flex";
-  document.getElementById("app-wrapper").style.display = "none";
-  document.getElementById("appLockInput").value = "";
-  setTimeout(() => document.getElementById("appLockInput").focus(), 100);
+    // 앱 잠금 화면으로
+    document.getElementById("appLockScreen").style.display = "flex";
+    document.getElementById("app-wrapper").style.display = "none";
+    document.getElementById("appLockInput").value = "";
+    setTimeout(() => document.getElementById("appLockInput").focus(), 100);
+  }, 1500); // toast 보여주고 1.5초 후 잠금
 }
 
 // 클릭/터치/키 입력 시 활동 시간 갱신
@@ -292,12 +317,12 @@ function doLogout() {
   document.addEventListener(evt, updateActivity, { passive: true });
 });
 
-// 30초마다 세션 체크
+// 5분마다 세션 체크
 setInterval(() => {
   if (document.getElementById("app-wrapper").style.display !== "none") {
     if (!checkSession()) doLogout();
   }
-}, 30000);
+}, 300000);
 
 // =============================================
 // 오늘의 질문 (로컬)
@@ -587,6 +612,7 @@ async function doAdminLogin() {
     const res = await gasPost({ action: "verifyAdmin", password: pw });
     if (res.ok) {
       adminLoggedIn = true;
+      localStorage.setItem("zj_admin_session", "1");
       updateActivity();
       document.getElementById("adminLock").style.display = "none";
       document.getElementById("adminDashboard").style.display = "block";
@@ -754,6 +780,50 @@ function renderSkeleton(containerId) {
     <div class="skeleton-card"><div class="skeleton skeleton-line short" style="margin-bottom:12px;"></div><div class="skeleton skeleton-tag"></div><div class="skeleton skeleton-tag"></div></div>
     <div class="skeleton-card"><div class="skeleton skeleton-line short" style="margin-bottom:10px;"></div><div class="skeleton skeleton-line full"></div><div class="skeleton skeleton-line mid"></div></div>`;
 }
+async function savePasswordChanges() {
+  const currentAdmin = document.getElementById("currentAdminPassword").value.trim();
+  const newApp = document.getElementById("newAppPassword").value.trim();
+  const newAdmin = document.getElementById("newAdminPassword").value.trim();
+  const result = document.getElementById("pwChangeResult");
+  // 3번: 현재 비번 확인 필수
+  if (!currentAdmin) {
+    result.textContent = "❌ 현재 운영자 비밀번호를 입력해주세요.";
+    result.style.color = "var(--danger)";
+    return;
+  }
+  if (currentAdmin !== adminPasswordFromGAS) {
+    result.textContent = "❌ 현재 비밀번호가 올바르지 않습니다.";
+    result.style.color = "var(--danger)";
+    document.getElementById("currentAdminPassword").value = "";
+    return;
+  }
+  if (!newApp && !newAdmin) {
+    result.textContent = "❌ 변경할 비밀번호를 입력해주세요.";
+    result.style.color = "var(--danger)";
+    return;
+  }
+  const appPw = newApp || appPasswordFromGAS;
+  const adminPw = newAdmin || adminPasswordFromGAS;
+  try {
+    const res = await gasPost({ action: "savePasswords", appPassword: appPw, adminPassword: adminPw });
+    if (res.ok) {
+      appPasswordFromGAS = appPw;
+      adminPasswordFromGAS = adminPw;
+      result.textContent = "✅ 비밀번호가 저장되었습니다.";
+      result.style.color = "var(--success)";
+      document.getElementById("currentAdminPassword").value = "";
+      document.getElementById("newAppPassword").value = "";
+      document.getElementById("newAdminPassword").value = "";
+    } else {
+      result.textContent = "❌ 저장 실패";
+      result.style.color = "var(--danger)";
+    }
+  } catch(e) {
+    result.textContent = "❌ 오류: " + e.message;
+    result.style.color = "var(--danger)";
+  }
+}
+
 function showToast(msg) {
   const el = document.getElementById("toastMsg");
   el.textContent = msg; el.classList.add("show");
@@ -765,7 +835,7 @@ function showToast(msg) {
 // =============================================
 function checkAppLock() {
   const input = document.getElementById("appLockInput").value.trim();
-  if (input === APP_PASSWORD) {
+  if (input === appPasswordFromGAS) {
     updateActivity();
     document.getElementById("appLockScreen").style.display = "none";
     document.getElementById("app-wrapper").style.display = "block";
@@ -781,16 +851,45 @@ function checkAppLock() {
 }
 
 // 초기화: 세션 유효하면 바로 입장
-if (checkSession()) {
-  updateActivity();
-  document.getElementById("appLockScreen").style.display = "none";
-  document.getElementById("app-wrapper").style.display = "block";
-  updateWeekUI();
-  loadHomeData();
-} else {
-  localStorage.removeItem("zj_last_activity");
-  setTimeout(() => document.getElementById("appLockInput").focus(), 100);
+async function startApp() {
+  // 비밀번호를 GAS에서 불러옴
+  try {
+    const pwRes = await gasGet({ action: "getPasswords" });
+    appPasswordFromGAS = pwRes.appPassword || "";
+    adminPasswordFromGAS = pwRes.adminPassword || "";
+  } catch(e) {
+    appPasswordFromGAS = "";
+    adminPasswordFromGAS = "";
+  }
+  // 1번: 폴백이 빈 값이면 오류 안내 표시, 입력 계속 비활성화
+  if (!appPasswordFromGAS) {
+    const errEl = document.getElementById("appLockError");
+    if (errEl) errEl.textContent = "비밀번호를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.";
+    return; // 입력란/버튼은 disabled 유지
+  }
+
+  if (checkSession()) {
+    updateActivity();
+    document.getElementById("appLockScreen").style.display = "none";
+    document.getElementById("app-wrapper").style.display = "block";
+    // 3번: 운영자 세션 복구
+    if (localStorage.getItem("zj_admin_session") === "1") {
+      adminLoggedIn = true;
+      document.getElementById("adminLock").style.display = "none";
+      document.getElementById("adminDashboard").style.display = "block";
+    }
+    updateWeekUI();
+    loadHomeData();
+  } else {
+    localStorage.removeItem("zj_last_activity");
+    localStorage.removeItem("zj_admin_session");
+    document.getElementById("appLockInput").disabled = false;
+    const btn = document.getElementById("appLockBtn");
+    if (btn) btn.textContent = "들어가기";
+    setTimeout(() => document.getElementById("appLockInput").focus(), 100);
+  }
 }
+startApp();
 </script>
 </body>
 </html>
