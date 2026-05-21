@@ -12,7 +12,6 @@
       --bg: #f7f5f2; --card: #ffffff; --primary: #6b7c5e; --primary-light: #eef1ea;
       --accent: #c9a96e; --accent-light: #fdf6ec; --text: #2d2d2d; --muted: #999;
       --border: #e8e4de; --danger: #c0392b; --success: #4a7c59; --radius: 16px;
-      --header-h: 57px;
     }
     * { box-sizing: border-box; }
     body { background: #ddd9d3; color: var(--text); font-family: 'Apple SD Gothic Neo','Noto Sans KR',sans-serif; min-height: 100vh; display: flex; justify-content: center; }
@@ -39,14 +38,10 @@
     .stat-box { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 10px; text-align: center; }
     .stat-box .num { font-size: 1.4rem; font-weight: 700; color: var(--primary); }
     .stat-box .lbl { font-size: 0.63rem; color: var(--muted); margin-top: 2px; }
-    /* 4번: 홈 테이블 헤더 고정 */
+    /* 4번: 홈 테이블 헤더 고정 - 스크롤 컨테이너 필요 */
+    .table-scroll { max-height: 420px; overflow-y: auto; }
     .status-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
-    .status-table th {
-      color: var(--muted); font-weight: 600; font-size: 0.68rem;
-      padding: 8px 6px; border-bottom: 1px solid var(--border);
-      text-align: center;
-      position: sticky; top: var(--header-h); background: var(--card); z-index: 2;
-    }
+    .status-table th { color: var(--muted); font-weight: 600; font-size: 0.68rem; padding: 8px 6px; border-bottom: 1px solid var(--border); text-align: center; position: sticky; top: 0; background: var(--card); z-index: 2; }
     /* 3번: 닉네임 헤더 왼쪽 정렬 */
     .status-table th:first-child { text-align: left; }
     .status-table td { padding: 10px 6px; border-bottom: 1px solid var(--border); text-align: center; vertical-align: middle; }
@@ -92,13 +87,10 @@
     .inner-tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 16px; }
     .inner-tab { flex: 1; background: none; border: none; padding: 10px; font-size: 0.84rem; color: var(--muted); font-weight: 500; border-bottom: 2px solid transparent; margin-bottom: -2px; cursor: pointer; }
     .inner-tab.active { color: var(--primary); font-weight: 700; border-bottom: 2px solid var(--primary); }
-    /* 5번: 운영자 테이블 헤더 고정 - overflow-x 제거로 sticky 작동 */
+    /* 5번: 운영자 테이블 헤더 고정 - 스크롤 컨테이너 필요 */
+    .admin-table-scroll { max-height: 420px; overflow-y: auto; overflow-x: auto; }
     .admin-flow-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
-    .admin-flow-table th {
-      background: var(--primary-light); color: var(--primary);
-      padding: 9px 8px; font-weight: 600; font-size: 0.68rem; text-align: left;
-      position: sticky; top: var(--header-h); z-index: 2;
-    }
+    .admin-flow-table th { background: var(--primary-light); color: var(--primary); padding: 9px 8px; font-weight: 600; font-size: 0.68rem; text-align: left; position: sticky; top: 0; z-index: 2; }
     .admin-flow-table td { padding: 11px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
     .admin-flow-table tr:last-child td { border-bottom: none; }
     .admin-flow-table tr { cursor: pointer; transition: background 0.15s; }
@@ -115,29 +107,14 @@
     .spinner { width: 26px; height: 26px; border: 3px solid var(--border); border-top: 3px solid var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 10px; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .lock-screen { padding: 48px 20px; text-align: center; }
-    #appLockScreen {
-      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: var(--bg); z-index: 9999;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 40px 32px;
-    }
+    /* 앱 전체 잠금 */
+    #appLockScreen { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 32px; }
     #appLockScreen .lock-logo { font-size: 2.8rem; margin-bottom: 8px; }
     #appLockScreen .lock-title { font-size: 1.3rem; font-weight: 700; color: var(--primary); margin-bottom: 6px; }
     #appLockScreen .lock-sub { font-size: 0.85rem; color: var(--muted); margin-bottom: 32px; }
-    #appLockScreen input {
-      width: 100%; max-width: 280px; text-align: center;
-      letter-spacing: 6px; font-size: 1.1rem;
-      border: 2px solid var(--border); border-radius: 12px;
-      padding: 14px; background: var(--card); outline: none; margin-bottom: 14px;
-    }
+    #appLockScreen input { width: 100%; max-width: 280px; text-align: center; letter-spacing: 6px; font-size: 1.1rem; border: 2px solid var(--border); border-radius: 12px; padding: 14px; background: var(--card); outline: none; margin-bottom: 14px; }
     #appLockScreen input:focus { border-color: var(--primary); }
-    #appLockScreen button {
-      width: 100%; max-width: 280px;
-      background: var(--primary); color: #fff;
-      border: none; border-radius: 12px;
-      padding: 14px; font-size: 1rem; font-weight: 600; cursor: pointer;
-    }
+    #appLockScreen button { width: 100%; max-width: 280px; background: var(--primary); color: #fff; border: none; border-radius: 12px; padding: 14px; font-size: 1rem; font-weight: 600; cursor: pointer; }
     #appLockScreen .lock-error { color: var(--danger); font-size: 0.82rem; margin-top: 10px; min-height: 20px; }
     .lock-screen i { font-size: 2.5rem; color: var(--primary); margin-bottom: 16px; display: block; }
     .toast-msg { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 0.84rem; z-index: 999; opacity: 0; transition: opacity 0.3s; white-space: nowrap; }
@@ -270,51 +247,57 @@
 </div>
 
 <script>
-const GAS_URL = "https://script.google.com/macros/s/AKfycbyEsbahXc2S_C0JBgtypDcPPrDJxwB91XDSaqdHYq2mDJ386R38DZubBdulrdYNQ0z6/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbznL5Ye57L5FqQR1eXye1Qy8SgOTjuxoHqFip8bbViXm7Z7LSHxRPnsYZ6rUadm1i-NGQ/exec";
+const APP_PASSWORD = "1234";
 const PROGRAM_START = new Date(new Date().getFullYear(), 3, 20);
 const MAX_WEEKS = 8;
-const APP_PASSWORD = "1234";
 
 // =============================================
-// 1번: 자동 로그아웃
+// 1번: 자동 로그아웃 설정
 // =============================================
-const TIMEOUT_MEMBER = 30 * 60 * 1000;  // 30분
-const TIMEOUT_ADMIN  = 60 * 60 * 1000;  // 60분
-const LS_LAST_ACTIVE = 'zj_last_active';
+const MEMBER_TIMEOUT = 30 * 60 * 1000;  // 일반: 30분
+const ADMIN_TIMEOUT  = 60 * 60 * 1000;  // 운영자: 60분
 
-function updateLastActive() {
-  localStorage.setItem(LS_LAST_ACTIVE, Date.now().toString());
+function updateActivity() {
+  localStorage.setItem("zj_last_activity", Date.now().toString());
 }
-function checkTimeout() {
-  const last = parseInt(localStorage.getItem(LS_LAST_ACTIVE) || '0');
-  if (!last) return true;
-  const timeout = adminLoggedIn ? TIMEOUT_ADMIN : TIMEOUT_MEMBER;
-  return (Date.now() - last) > timeout;
+
+function getTimeout() {
+  return adminLoggedIn ? ADMIN_TIMEOUT : MEMBER_TIMEOUT;
 }
-function lockApp() {
+
+function checkSession() {
+  const last = parseInt(localStorage.getItem("zj_last_activity") || "0");
+  if (!last) return false;
+  return (Date.now() - last) < getTimeout();
+}
+
+function doLogout() {
+  localStorage.removeItem("zj_last_activity");
   adminLoggedIn = false;
-  localStorage.removeItem(LS_LAST_ACTIVE);
   // 운영자 대시보드 잠금 상태로 초기화
   document.getElementById("adminLock").style.display = "block";
   document.getElementById("adminDashboard").style.display = "none";
   document.getElementById("adminPwInput").value = "";
   document.getElementById("adminPwError").textContent = "";
-  // 앱 잠금 화면 표시
+  // 앱 잠금 화면으로
   document.getElementById("appLockScreen").style.display = "flex";
   document.getElementById("app-wrapper").style.display = "none";
   document.getElementById("appLockInput").value = "";
   setTimeout(() => document.getElementById("appLockInput").focus(), 100);
 }
-// 활동 감지 → 타이머 리셋
-['click','touchstart','keydown'].forEach(ev =>
-  document.addEventListener(ev, updateLastActive, { passive: true })
-);
-// 1분마다 타임아웃 체크
+
+// 클릭/터치/키 입력 시 활동 시간 갱신
+["click","touchstart","keydown"].forEach(evt => {
+  document.addEventListener(evt, updateActivity, { passive: true });
+});
+
+// 30초마다 세션 체크
 setInterval(() => {
   if (document.getElementById("app-wrapper").style.display !== "none") {
-    if (checkTimeout()) lockApp();
+    if (!checkSession()) doLogout();
   }
-}, 60 * 1000);
+}, 30000);
 
 // =============================================
 // 오늘의 질문 (로컬)
@@ -354,12 +337,10 @@ let adminAnalysisData = [];
 
 const CACHE_PREFIX = 'zj_insight_';
 function getLocalCache(key) {
-  try { const d = localStorage.getItem(CACHE_PREFIX + key); return d ? JSON.parse(d) : null; }
-  catch(e) { return null; }
+  try { const d = localStorage.getItem(CACHE_PREFIX + key); return d ? JSON.parse(d) : null; } catch(e) { return null; }
 }
 function setLocalCache(key, data) {
-  try { localStorage.setItem(CACHE_PREFIX + key, JSON.stringify(data)); }
-  catch(e) {}
+  try { localStorage.setItem(CACHE_PREFIX + key, JSON.stringify(data)); } catch(e) {}
 }
 
 // =============================================
@@ -367,14 +348,15 @@ function setLocalCache(key, data) {
 // =============================================
 function getDefaultWeek() {
   const now = new Date();
-  const diff = now - new Date(now.getFullYear(), 3, 20);
+  const start = new Date(now.getFullYear(), 3, 20);
+  const diff = now - start;
   if (diff < 0) return 1;
-  const w = Math.floor(diff / (7*24*60*60*1000)) + 1;
+  const w = Math.floor(diff / (7 * 24 * 60 * 60 * 1000)) + 1;
   return Math.min(Math.max(w, 1), MAX_WEEKS);
 }
 function getWeekMonday(w) {
   const d = new Date(PROGRAM_START);
-  d.setDate(d.getDate() + (w-1)*7);
+  d.setDate(d.getDate() + (w - 1) * 7);
   return d;
 }
 function weekMondayStr(w) {
@@ -384,19 +366,19 @@ function weekMondayStr(w) {
 function weekNumText(w) { return w + "주차"; }
 function weekDateText(w) {
   const s = getWeekMonday(w);
-  const e = new Date(s); e.setDate(s.getDate()+6);
-  return (s.getMonth()+1)+"/"+s.getDate()+" ~ "+(e.getMonth()+1)+"/"+e.getDate();
+  const e = new Date(s); e.setDate(s.getDate() + 6);
+  return (s.getMonth()+1) + "/" + s.getDate() + " ~ " + (e.getMonth()+1) + "/" + e.getDate();
 }
 function getWeekNumFromDate(dateStr) {
   const d = new Date(dateStr);
   const diff = d - PROGRAM_START;
   if (diff < 0) return 1;
-  const w = Math.floor(diff / (7*24*60*60*1000)) + 1;
+  const w = Math.floor(diff / (7 * 24 * 60 * 60 * 1000)) + 1;
   return Math.min(Math.max(w, 1), MAX_WEEKS);
 }
 function todayStr() {
   const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
-  return now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0")+"-"+String(now.getDate()).padStart(2,"0");
+  return now.getFullYear() + "-" + String(now.getMonth()+1).padStart(2,"0") + "-" + String(now.getDate()).padStart(2,"0");
 }
 
 // 2번: changeWeek - 캐시 삭제 제거, 있으면 즉시 표시 후 백그라운드 갱신
@@ -410,6 +392,7 @@ function changeWeek(dir) {
   if (active === 'screen-growth' && document.getElementById('growthMemberSelect').value) loadGrowthInsight();
   if (active === 'screen-admin' && currentAdminTab === 'analysis') { adminAnalysisData = []; loadAdminAnalysis(); }
 }
+
 function updateWeekUI() {
   const num = weekNumText(currentWeek), date = weekDateText(currentWeek);
   document.getElementById("headerWeekChip").textContent = num;
@@ -475,7 +458,7 @@ async function refreshHomeData(homeCacheKey) {
     renderStats(statusRes.stats);
     renderMemberTable(statusRes.list);
   } catch(e) {
-    document.getElementById("memberStatusArea").innerHTML = '<div style="color:var(--danger);text-align:center;padding:20px;">데이터를 불러오지 못했습니다.<br><small>'+e.message+'</small></div>';
+    document.getElementById("memberStatusArea").innerHTML = '<div style="color:var(--danger);text-align:center;padding:20px;">데이터를 불러오지 못했습니다.<br><small>' + e.message + '</small></div>';
   }
 }
 function renderStats(s) {
@@ -495,7 +478,14 @@ function renderMemberTable(list) {
     ${isCurrentWeek ? `<td>${m.today ? '<span class="badge-done">✓</span>' : '<span class="badge-no">-</span>'}</td>` : ""}
   </tr>`).join("");
   const todayHeader = isCurrentWeek ? "<th>오늘</th>" : "";
-  document.getElementById("memberStatusArea").innerHTML = `<table class="status-table"><thead><tr><th>닉네임</th><th>인증</th><th>주간 글쓰기</th>${todayHeader}</tr></thead><tbody>${rows}</tbody></table>`;
+  // 4번: 스크롤 컨테이너로 감싸서 헤더 고정
+  document.getElementById("memberStatusArea").innerHTML = `
+    <div class="table-scroll">
+      <table class="status-table">
+        <thead><tr><th>닉네임</th><th>인증</th><th>주간 글쓰기</th>${todayHeader}</tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
 }
 
 // =============================================
@@ -524,46 +514,46 @@ async function loadGrowthInsight() {
     setLocalCache(cacheKey, data);
     renderInsight(data, "growthResult");
   } catch(e) {
-    document.getElementById("growthResult").innerHTML = '<div style="color:var(--danger);padding:16px;">오류: '+e.message+'</div>';
+    document.getElementById("growthResult").innerHTML = '<div style="color:var(--danger);padding:16px;">오류: ' + e.message + '</div>';
   }
 }
 function safeArr(v) { if (!v) return []; return Array.isArray(v) ? v : [v]; }
 
 function renderInsight(d, containerId, isAdmin = false) {
   if (!d) { document.getElementById(containerId).innerHTML = '<div class="empty-state">데이터가 없습니다.</div>'; return; }
-  const srcMap = { ai:"AI 분석", cached:"🗂 저장된 분석", keyword:"키워드 분석" };
-  const srcClass = { ai:"ai", cached:"cached", keyword:"keyword" };
-  const sourceBadge = d.source && d.source !== "none" ? `<span class="source-badge ${srcClass[d.source]||'keyword'}">${srcMap[d.source]||""}</span>` : "";
-  const flowHtml = `<div class="flow-hero"><div class="label">🌊 이번 주 흐름</div><div class="flow-text">${d.weekly_flow_summary||"이번 주 흐름이 아직 이어지지 않았어요."}</div></div>`;
+  const srcMap = { ai: "AI 분석", cached: "🗂 저장된 분석", keyword: "키워드 분석" };
+  const srcClass = { ai: "ai", cached: "cached", keyword: "keyword" };
+  const sourceBadge = d.source && d.source !== "none" ? `<span class="source-badge ${srcClass[d.source] || 'keyword'}">${srcMap[d.source] || ""}</span>` : "";
+  const flowHtml = `<div class="flow-hero"><div class="label">🌊 이번 주 흐름</div><div class="flow-text">${d.weekly_flow_summary || "이번 주 흐름이 아직 이어지지 않았어요."}</div></div>`;
   const emotions = safeArr(d.emotion_keywords).filter(Boolean);
-  const emotionHtml = emotions.length ? emotions.map(e=>`<span class="tag">${e}</span>`).join("") : `<span class="tag ghost">기록을 기다리고 있어요</span>`;
+  const emotionHtml = emotions.length ? emotions.map(e => `<span class="tag">${e}</span>`).join("") : `<span class="tag ghost">기록을 기다리고 있어요</span>`;
   const selfcare = safeArr(d.selfcare_patterns).filter(Boolean);
-  const selfcareHtml = selfcare.length ? selfcare.map(s=>`<span class="tag soft">${s}</span>`).join("") : `<span class="tag ghost">기록을 기다리고 있어요</span>`;
+  const selfcareHtml = selfcare.length ? selfcare.map(s => `<span class="tag soft">${s}</span>`).join("") : `<span class="tag ghost">기록을 기다리고 있어요</span>`;
   const talks = safeArr(d.self_talk_patterns).filter(Boolean);
-  const talkHtml = talks.length ? talks.map(t=>`<div class="self-talk-item">" ${t} "</div>`).join("") : `<div class="self-talk-item" style="color:#bbb;font-style:normal;">기록을 기다리고 있어요</div>`;
+  const talkHtml = talks.length ? talks.map(t => `<div class="self-talk-item">" ${t} "</div>`).join("") : `<div class="self-talk-item" style="color:#bbb;font-style:normal;">기록을 기다리고 있어요</div>`;
   const innerHtml = d.weekly_inner_patterns ? `<div class="inner-pattern-text">${d.weekly_inner_patterns}</div>` : `<div class="inner-pattern-text" style="color:#bbb;">주간 글쓰기 기록을 기다리고 있어요.</div>`;
   const bg = d.background || {};
-  const initialHtml = (bg.reason||bg.status||bg.goal) ? `
+  const initialHtml = (bg.reason || bg.status || bg.goal) ? `
     <div style="margin-bottom:12px;">
       <button class="initial-toggle" onclick="toggleInitial(this)">
         <span>🌱 처음의 나</span><i class="bi bi-chevron-down"></i>
       </button>
       <div class="collapse" id="initialBody_${containerId}">
         <div class="initial-body">
-          ${bg.reason?`<div class="initial-row"><span class="initial-label">신청 이유</span><span class="initial-val">${bg.reason}</span></div>`:""}
-          ${bg.status?`<div class="initial-row"><span class="initial-label">시작 당시</span><span class="initial-val">${bg.status}</span></div>`:""}
-          ${bg.goal?`<div class="initial-row"><span class="initial-label">챙기고 싶은 모습</span><span class="initial-val">${bg.goal}</span></div>`:""}
+          ${bg.reason ? `<div class="initial-row"><span class="initial-label">신청 이유</span><span class="initial-val">${bg.reason}</span></div>` : ""}
+          ${bg.status ? `<div class="initial-row"><span class="initial-label">시작 당시</span><span class="initial-val">${bg.status}</span></div>` : ""}
+          ${bg.goal ? `<div class="initial-row"><span class="initial-label">챙기고 싶은 모습</span><span class="initial-val">${bg.goal}</span></div>` : ""}
         </div>
       </div>
     </div>` : "";
   const coachingHtml = d.coaching ? `<div class="coaching-card">💚 ${d.coaching}</div>` : "";
-  const tl = (d.timeline||[]).map(t=>`<div class="timeline-item"><div class="timeline-date">${t.date}</div><div class="timeline-text">${t.text}</div></div>`).join("") || '<div class="empty-state">이번 주 기록이 없어요.</div>';
+  const tl = (d.timeline || []).map(t => `<div class="timeline-item"><div class="timeline-date">${t.date}</div><div class="timeline-text">${t.text}</div></div>`).join("") || '<div class="empty-state">이번 주 기록이 없어요.</div>';
   const adminMemoHtml = isAdmin ? `
     <div class="section-card" style="margin-top:4px;">
       <div class="section-title"><i class="bi bi-pencil-square"></i> 운영 메모 <span style="font-size:0.65rem;color:var(--muted);font-weight:400;">(운영자 전용)</span></div>
       <div class="admin-note-area">
         <div class="admin-note-label">관찰 메모</div>
-        <textarea id="adminNoteText_${d.name}" rows="3" placeholder="흐름 관찰 메모를 남겨보세요...">${d.admin_note||""}</textarea>
+        <textarea id="adminNoteText_${d.name}" rows="3" placeholder="흐름 관찰 메모를 남겨보세요...">${d.admin_note || ""}</textarea>
       </div>
       <button onclick="saveAdminNote('${d.name}')" style="margin-top:10px;background:var(--primary-light);color:var(--primary);border:none;border-radius:8px;padding:8px 16px;font-size:0.82rem;font-weight:600;cursor:pointer;">메모 저장</button>
       <span id="noteSaveResult_${d.name}" style="font-size:0.78rem;margin-left:8px;color:var(--success);"></span>
@@ -597,13 +587,13 @@ async function doAdminLogin() {
     const res = await gasPost({ action: "verifyAdmin", password: pw });
     if (res.ok) {
       adminLoggedIn = true;
-      updateLastActive(); // 운영자 로그인 시 타이머 시작
+      updateActivity();
       document.getElementById("adminLock").style.display = "none";
       document.getElementById("adminDashboard").style.display = "block";
       await loadAdminMemberList();
       document.getElementById("inputDate").value = todayStr();
     } else { document.getElementById("adminPwError").textContent = "비밀번호가 올바르지 않습니다."; }
-  } catch(e) { document.getElementById("adminPwError").textContent = "오류: "+e.message; }
+  } catch(e) { document.getElementById("adminPwError").textContent = "오류: " + e.message; }
 }
 async function loadAdminMemberList() {
   if (!membersCache.length) membersCache = await gasGet({ action: "getMembers" });
@@ -620,24 +610,25 @@ async function doSaveAuth() {
     result.textContent = res.message;
     result.style.color = res.message.startsWith("✅") ? "var(--success)" : "var(--danger)";
     if (res.message.startsWith("✅")) {
+      // 2번: 저장 성공 시에만 해당 주차 캐시 삭제
       const savedWeek = getWeekNumFromDate(formData.date);
       localStorage.removeItem(CACHE_PREFIX + formData.memberId + "_" + savedWeek);
       localStorage.removeItem(CACHE_PREFIX + "admin_all_" + savedWeek);
-      localStorage.removeItem(CACHE_PREFIX + "home_status_" + savedWeek); // 홈 캐시도 삭제
+      localStorage.removeItem(CACHE_PREFIX + "home_status_" + savedWeek);
       adminAnalysisData = [];
       document.getElementById("inputSelfRespect").value = "";
       document.getElementById("inputWeeklyWriting").value = "";
       document.getElementById("inputMember").value = "";
     }
-  } catch(e) { result.textContent = "❌ 저장 실패: "+e.message; result.style.color = "var(--danger)"; }
+  } catch(e) { result.textContent = "❌ 저장 실패: " + e.message; result.style.color = "var(--danger)"; }
   finally { btn.disabled = false; btn.textContent = "저장하기"; }
 }
 function switchAdminTab(tab) {
   currentAdminTab = tab;
-  document.getElementById("tab-input").classList.toggle("active", tab==="input");
-  document.getElementById("tab-analysis").classList.toggle("active", tab==="analysis");
-  document.getElementById("adminTabInput").style.display = tab==="input" ? "block" : "none";
-  document.getElementById("adminTabAnalysis").style.display = tab==="analysis" ? "block" : "none";
+  document.getElementById("tab-input").classList.toggle("active", tab === "input");
+  document.getElementById("tab-analysis").classList.toggle("active", tab === "analysis");
+  document.getElementById("adminTabInput").style.display = tab === "input" ? "block" : "none";
+  document.getElementById("adminTabAnalysis").style.display = tab === "analysis" ? "block" : "none";
   if (tab === "analysis") loadAdminAnalysis();
 }
 async function loadAdminAnalysis() {
@@ -656,9 +647,9 @@ async function loadAdminAnalysis() {
     <div id="adminTableBody" style="margin-top:12px;"></div>`;
   for (let i = 0; i < total; i++) {
     const m = members[i];
-    const pct = Math.round(((i+1)/total)*100);
+    const pct = Math.round(((i + 1) / total) * 100);
     document.getElementById("adminProgressBar").style.width = pct + "%";
-    document.getElementById("adminProgressText").textContent = m.name + " 분석 중... ("+(i+1)+"/"+total+"명)";
+    document.getElementById("adminProgressText").textContent = m.name + " 분석 중... (" + (i+1) + "/" + total + "명)";
     const memberCacheKey = m.name + "_" + currentWeek;
     const memberCached = getLocalCache(memberCacheKey);
     let data;
@@ -667,9 +658,7 @@ async function loadAdminAnalysis() {
       try {
         data = await gasGet({ action: "getMemberInsight", name: m.name, week: weekMondayStr(currentWeek) });
         setLocalCache(memberCacheKey, data);
-      } catch(e) {
-        data = { name: m.name, weekly_flow: "오류", emotion_keywords: [], change_direction: "-", flow_status: "🔴 흐름 정체" };
-      }
+      } catch(e) { data = { name: m.name, weekly_flow: "오류", emotion_keywords: [], change_direction: "-", flow_status: "🔴 흐름 정체" }; }
     }
     results.push(data);
     renderAdminTablePartial(results, "adminTableBody");
@@ -680,36 +669,40 @@ async function loadAdminAnalysis() {
   renderAdminTable(results);
 }
 function renderAdminTablePartial(arr, containerId) {
-  const rows = arr.map((d,i) => {
-    const emotions = safeArr(d.emotion_keywords).filter(Boolean).slice(0,3).map(e=>`<span class="emotion-mini">${e}</span>`).join("");
+  const rows = arr.map((d, i) => {
+    const emotions = safeArr(d.emotion_keywords).filter(Boolean).slice(0,3).map(e => `<span class="emotion-mini">${e}</span>`).join("");
     return `<tr onclick="showAdminDetail(${i})">
       <td class="member-name-cell">${d.name}</td>
-      <td class="flow-cell">${d.weekly_flow||"흐름 이어가는 중"}</td>
-      <td><div class="emotion-cell">${emotions||"-"}</div></td>
-      <td class="flow-cell">${d.change_direction||"-"}</td>
-      <td class="flow-status-badge">${d.flow_status||"🟡 흐름 흔들림"}</td>
+      <td class="flow-cell">${d.weekly_flow || "흐름 이어가는 중"}</td>
+      <td><div class="emotion-cell">${emotions || "-"}</div></td>
+      <td class="flow-cell">${d.change_direction || "-"}</td>
+      <td class="flow-status-badge">${d.flow_status || "🟡 흐름 흔들림"}</td>
     </tr>`;
   }).join("");
   const el = document.getElementById(containerId);
-  if (el) el.innerHTML = `<table class="admin-flow-table"><thead><tr><th>멤버</th><th>이번 주 흐름</th><th>느낀 상태</th><th>변화 방향</th><th>흐름 상태</th></tr></thead><tbody>${rows}</tbody></table>`;
+  // 5번: 스크롤 컨테이너로 감싸서 헤더 고정
+  if (el) el.innerHTML = `<div class="admin-table-scroll"><table class="admin-flow-table"><thead><tr><th>멤버</th><th>이번 주 흐름</th><th>느낀 상태</th><th>변화 방향</th><th>흐름 상태</th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 function renderAdminTable(arr) {
   if (!arr || !arr.length) { document.getElementById("adminAnalysisArea").innerHTML = '<div class="empty-state">데이터 없음</div>'; return; }
-  const rows = arr.map((d,i) => {
-    const emotions = safeArr(d.emotion_keywords).filter(Boolean).slice(0,3).map(e=>`<span class="emotion-mini">${e}</span>`).join("");
+  const rows = arr.map((d, i) => {
+    const emotions = safeArr(d.emotion_keywords).filter(Boolean).slice(0, 3).map(e => `<span class="emotion-mini">${e}</span>`).join("");
     return `<tr onclick="showAdminDetail(${i})">
       <td class="member-name-cell">${d.name}</td>
-      <td class="flow-cell">${d.weekly_flow||"흐름 이어가는 중"}</td>
-      <td><div class="emotion-cell">${emotions||"-"}</div></td>
-      <td class="flow-cell">${d.change_direction||"-"}</td>
-      <td class="flow-status-badge">${d.flow_status||"🟡 흐름 흔들림"}</td>
+      <td class="flow-cell">${d.weekly_flow || "흐름 이어가는 중"}</td>
+      <td><div class="emotion-cell">${emotions || "-"}</div></td>
+      <td class="flow-cell">${d.change_direction || "-"}</td>
+      <td class="flow-status-badge">${d.flow_status || "🟡 흐름 흔들림"}</td>
     </tr>`;
   }).join("");
+  // 5번: 스크롤 컨테이너로 감싸서 헤더 고정
   document.getElementById("adminAnalysisArea").innerHTML = `
-    <table class="admin-flow-table">
-      <thead><tr><th>멤버</th><th>이번 주 흐름</th><th>느낀 상태</th><th>변화 방향</th><th>흐름 상태</th></tr></thead>
-      <tbody>${rows}</tbody>
-    </table>`;
+    <div class="admin-table-scroll">
+      <table class="admin-flow-table">
+        <thead><tr><th>멤버</th><th>이번 주 흐름</th><th>느낀 상태</th><th>변화 방향</th><th>흐름 상태</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
 }
 async function showAdminDetail(idx) {
   const d = adminAnalysisData[idx];
@@ -730,8 +723,8 @@ function showAdminList() {
   document.getElementById("adminListView").style.display = "block";
 }
 async function saveAdminNote(name) {
-  const note = document.getElementById("adminNoteText_"+name).value;
-  const resultEl = document.getElementById("noteSaveResult_"+name);
+  const note = document.getElementById("adminNoteText_" + name).value;
+  const resultEl = document.getElementById("noteSaveResult_" + name);
   try {
     await gasPost({ action: "saveAdminNote", name, note });
     resultEl.textContent = "저장됨 ✓";
@@ -750,9 +743,9 @@ async function clearAllCache() {
     adminAnalysisData = [];
     showAdminList();
     document.getElementById("adminAnalysisArea").innerHTML = '<div class="loading"><div class="spinner"></div>다시 분석 중...</div>';
-    showToast("✅ "+currentWeek+"주차 재분석 시작!");
+    showToast("✅ " + currentWeek + "주차 재분석 시작!");
     await loadAdminAnalysis();
-  } catch(e) { showToast("❌ 오류: "+e.message); }
+  } catch(e) { showToast("❌ 오류: " + e.message); }
 }
 function renderSkeleton(containerId) {
   document.getElementById(containerId).innerHTML = `
@@ -768,12 +761,12 @@ function showToast(msg) {
 }
 
 // =============================================
-// 앱 비밀번호 잠금
+// 앱 잠금 / 초기화
 // =============================================
 function checkAppLock() {
   const input = document.getElementById("appLockInput").value.trim();
   if (input === APP_PASSWORD) {
-    updateLastActive(); // 타임스탬프 저장
+    updateActivity();
     document.getElementById("appLockScreen").style.display = "none";
     document.getElementById("app-wrapper").style.display = "block";
     updateWeekUI();
@@ -787,14 +780,15 @@ function checkAppLock() {
   }
 }
 
-// 초기화
-if (localStorage.getItem(LS_LAST_ACTIVE) && !checkTimeout()) {
-  updateLastActive();
+// 초기화: 세션 유효하면 바로 입장
+if (checkSession()) {
+  updateActivity();
   document.getElementById("appLockScreen").style.display = "none";
   document.getElementById("app-wrapper").style.display = "block";
   updateWeekUI();
   loadHomeData();
 } else {
+  localStorage.removeItem("zj_last_activity");
   setTimeout(() => document.getElementById("appLockInput").focus(), 100);
 }
 </script>
