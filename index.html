@@ -551,7 +551,7 @@ function safeArr(v) { if (!v) return []; return Array.isArray(v) ? v : [v]; }
 
 function renderInsight(d, containerId, isAdmin = false) {
   if (!d) { document.getElementById(containerId).innerHTML = '<div class="empty-state">데이터가 없습니다.</div>'; return; }
-  const srcMap = { ai: "AI 분석", cached: "🗂 저장된 분석", keyword: "키워드 분석" };
+  const srcMap = { ai: "코치 분석", cached: "🗂 저장된 분석", keyword: "키워드 분석" };
   const srcClass = { ai: "ai", cached: "cached", keyword: "keyword" };
   const sourceBadge = d.source && d.source !== "none" ? `<span class="source-badge ${srcClass[d.source] || 'keyword'}">${srcMap[d.source] || ""}</span>` : "";
   const flowHtml = `<div class="flow-hero"><div class="label">🌊 이번 주 흐름</div><div class="flow-text">${d.weekly_flow_summary || "이번 주 흐름이 아직 이어지지 않았어요."}</div></div>`;
