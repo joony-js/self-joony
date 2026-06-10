@@ -75,6 +75,9 @@
     .timeline-item:last-child { border-bottom: none; }
     .timeline-date { font-size: 0.72rem; color: var(--muted); min-width: 36px; padding-top: 2px; }
     .timeline-text { font-size: 0.84rem; line-height: 1.5; color: var(--text); }
+    .sarang-comment { background: var(--accent-light); border-left: 3px solid var(--accent); border-radius: 8px; padding: 9px 12px; margin-top: 8px; }
+    .sarang-comment .sarang-label { font-size: 0.68rem; font-weight: 700; color: #8a6628; margin-bottom: 3px; }
+    .sarang-comment .sarang-text { font-size: 0.83rem; line-height: 1.5; color: #6b4e1a; }
     .form-label { font-size: 0.82rem; font-weight: 600; color: var(--text); margin-bottom: 5px; }
     .form-control, .form-select { border: 1px solid var(--border); border-radius: 10px; font-size: 0.88rem; padding: 10px 12px; background: var(--bg); }
     .form-control:focus, .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(107,124,94,0.12); outline: none; }
@@ -199,6 +202,7 @@
         <div class="mb-3"><label class="form-label">멤버</label><select class="form-select" id="inputMember"><option value="">-- 멤버 선택 --</option></select></div>
         <div class="mb-3"><label class="form-label">자기존중 기록 (데일리)</label><textarea class="form-control" id="inputSelfRespect" rows="3" placeholder="오늘의 알아차림 내용"></textarea></div>
         <div class="mb-3"><label class="form-label">주간 글쓰기 <span style="color:var(--muted);font-weight:400;">(선택)</span></label><textarea class="form-control" id="inputWeeklyWriting" rows="3" placeholder="주간 글쓰기 내용"></textarea></div>
+        <div class="mb-3"><label class="form-label">💌 사랑주니 코멘트 <span style="color:var(--muted);font-weight:400;">(선택)</span></label><textarea class="form-control" id="inputSarangComment" rows="3" placeholder="멤버에게 전하는 따뜻한 한마디"></textarea></div>
         <button class="btn-primary-custom" id="saveBtn" onclick="doSaveAuth()">저장하기</button>
         <div id="saveResult" style="text-align:center;margin-top:10px;font-size:0.85rem;"></div>
       </div>
@@ -235,7 +239,7 @@
 </div>
 
 <script>
-const GAS_URL = "https://script.google.com/macros/s/AKfycby4DXoLY4L3Q4bl1cTL5IrIQzxmmiM-ShgP1KuiNv7rGyb-avTdpR-2BK9gDuwqWmBZ_Q/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbyEsbahXc2S_C0JBgtypDcPPrDJxwB91XDSaqdHYq2mDJ386R38DZubBdulrdYNQ0z6/exec";
 
 // 4번: 앱 비밀번호 GitHub에서 관리 (하드코딩)
 const APP_PASSWORD = "1234";
@@ -487,7 +491,7 @@ async function loadGrowthInsight() {
   if (!name) { document.getElementById("growthResult").innerHTML = ""; return; }
   const cacheKey = name + "_" + currentWeek;
   const cached = getLocalCache(cacheKey);
-  if (cached) { renderInsight(cached, "growthResult"); return; }
+  if (cached) { cached._week = currentWeek; await renderInsight(cached, "growthResult"); return; }
   // 7번: 로딩 중 문구 개선
   document.getElementById("growthResult").innerHTML = `
     <div class="loading" style="padding:40px 20px;">
@@ -497,14 +501,15 @@ async function loadGrowthInsight() {
   try {
     const data = await gasGet({ action: "getMemberInsight", name, week: weekMondayStr(currentWeek) });
     setLocalCache(cacheKey, data);
-    renderInsight(data, "growthResult");
+    data._week = currentWeek;
+    await renderInsight(data, "growthResult");
   } catch(e) {
     document.getElementById("growthResult").innerHTML = '<div style="color:var(--danger);padding:16px;">오류: ' + e.message + '</div>';
   }
 }
 function safeArr(v) { if (!v) return []; return Array.isArray(v) ? v : [v]; }
 
-function renderInsight(d, containerId, isAdmin = false) {
+async function renderInsight(d, containerId, isAdmin = false) {
   if (!d) { document.getElementById(containerId).innerHTML = '<div class="empty-state">데이터가 없습니다.</div>'; return; }
   // 5번: 뱃지 표현 수정
   const srcMap = { ai: "나의 흐름 분석", cached: "기록된 흐름", keyword: "키워드 흐름 분석" };
@@ -533,7 +538,28 @@ function renderInsight(d, containerId, isAdmin = false) {
       </div>
     </div>` : "";
   const coachingHtml = d.coaching ? `<div class="coaching-card">💚 ${d.coaching}</div>` : "";
-  const tl = (d.timeline || []).map(t => `<div class="timeline-item"><div class="timeline-date">${t.date}</div><div class="timeline-text">${t.text}</div></div>`).join("") || '<div class="empty-state">이번 주 기록이 없어요.</div>';
+  // 사랑주니 코멘트 불러오기 (날짜별 매칭)
+  let sarangMap = {};
+  if (d.name && d._week) {
+    const sarangCacheKey = "sarang_" + d.name + "_" + d._week;
+    let comments = getLocalCache(sarangCacheKey);
+    if (!comments) {
+      try {
+        const sRes = await gasGet({ action: "getSarangComments", name: d.name, week: weekMondayStr(d._week) });
+        comments = sRes.comments || [];
+        setLocalCache(sarangCacheKey, comments);
+      } catch(e) { comments = []; }
+    }
+    (comments || []).forEach(c => { sarangMap[c.date] = c.comment; });
+  }
+
+  const tl = (d.timeline || []).map(t => {
+    const sarang = sarangMap[t.date];
+    const sarangHtml = sarang
+      ? `<div class="sarang-comment"><div class="sarang-label">💌 사랑주니 코멘트</div><div class="sarang-text">${sarang}</div></div>`
+      : "";
+    return `<div class="timeline-item"><div class="timeline-date">${t.date}</div><div style="flex:1;"><div class="timeline-text">${t.text}</div>${sarangHtml}</div></div>`;
+  }).join("") || '<div class="empty-state">이번 주 기록이 없어요.</div>';
   const adminMemoHtml = isAdmin ? `
     <div class="section-card" style="margin-top:4px;">
       <div class="section-title"><i class="bi bi-pencil-square"></i> 운영 메모 <span style="font-size:0.65rem;color:var(--muted);font-weight:400;">(운영자 전용)</span></div>
@@ -590,6 +616,7 @@ async function loadAdminMemberList() {
 }
 async function doSaveAuth() {
   const formData = { date: document.getElementById("inputDate").value, memberId: document.getElementById("inputMember").value, selfRespect: document.getElementById("inputSelfRespect").value, weeklyWriting: document.getElementById("inputWeeklyWriting").value };
+  const sarangComment = document.getElementById("inputSarangComment").value.trim();
   const btn = document.getElementById("saveBtn"), result = document.getElementById("saveResult");
   btn.disabled = true; btn.textContent = "저장 중...";
   try {
@@ -597,13 +624,21 @@ async function doSaveAuth() {
     result.textContent = res.message;
     result.style.color = res.message.startsWith("✅") ? "var(--success)" : "var(--danger)";
     if (res.message.startsWith("✅")) {
+      // 사랑주니 코멘트가 있으면 함께 저장
+      if (sarangComment) {
+        try {
+          await gasPost({ action: "saveSarangComment", name: formData.memberId, date: formData.date, comment: sarangComment });
+        } catch(e) { console.error("코멘트 저장 오류", e); }
+      }
       const savedWeek = getWeekNumFromDate(formData.date);
       localStorage.removeItem(CACHE_PREFIX + formData.memberId + "_" + savedWeek);
       localStorage.removeItem(CACHE_PREFIX + "admin_all_" + savedWeek);
       localStorage.removeItem(CACHE_PREFIX + "home_status_" + savedWeek);
+      localStorage.removeItem(CACHE_PREFIX + "sarang_" + formData.memberId + "_" + savedWeek);
       adminAnalysisData = [];
       document.getElementById("inputSelfRespect").value = "";
       document.getElementById("inputWeeklyWriting").value = "";
+      document.getElementById("inputSarangComment").value = "";
       document.getElementById("inputMember").value = "";
     }
   } catch(e) { result.textContent = "❌ 저장 실패: " + e.message; result.style.color = "var(--danger)"; }
@@ -696,11 +731,12 @@ async function showAdminDetail(idx) {
   const cacheKey = d.name + "_" + currentWeek;
   const cached = getLocalCache(cacheKey);
   const detail = cached || d;
+  detail._week = currentWeek;
   try {
     const noteRes = await gasGet({ action: "getAdminNote", name: d.name });
     detail.admin_note = noteRes.note || "";
   } catch(e) { detail.admin_note = ""; }
-  renderInsight(detail, "adminDetailContent", true);
+  await renderInsight(detail, "adminDetailContent", true);
 }
 function showAdminList() {
   document.getElementById("adminDetailView").style.display = "none";
