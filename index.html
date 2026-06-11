@@ -546,19 +546,13 @@ async function renderInsight(d, containerId, isAdmin = false) {
       </div>
     </div>` : "";
   const coachingHtml = d.coaching ? `<div class="coaching-card">💚 ${d.coaching}</div>` : "";
-  // 사랑주니 코멘트 불러오기 (날짜별 매칭)
+  // 사랑주니 코멘트 - 캐싱 없이 매번 직접 불러오기 (수정 즉시 반영)
   let sarangMap = {};
   if (d.name && d._week) {
-    const sarangCacheKey = "sarang_" + d.name + "_" + d._week;
-    let comments = getLocalCache(sarangCacheKey);
-    if (!comments) {
-      try {
-        const sRes = await gasGet({ action: "getSarangComments", name: d.name, week: weekMondayStr(d._week) });
-        comments = sRes.comments || [];
-        setLocalCache(sarangCacheKey, comments);
-      } catch(e) { comments = []; }
-    }
-    (comments || []).forEach(c => { sarangMap[c.date] = c.comment; });
+    try {
+      const sRes = await gasGet({ action: "getSarangComments", name: d.name, week: weekMondayStr(d._week) });
+      (sRes.comments || []).forEach(c => { sarangMap[c.date] = c.comment; });
+    } catch(e) {}
   }
 
   const tl = (d.timeline || []).map(t => {
@@ -660,7 +654,6 @@ async function doSaveAuth() {
       localStorage.removeItem(CACHE_PREFIX + formData.memberId + "_" + savedWeek);
       localStorage.removeItem(CACHE_PREFIX + "admin_all_" + savedWeek);
       localStorage.removeItem(CACHE_PREFIX + "home_status_" + savedWeek);
-      localStorage.removeItem(CACHE_PREFIX + "sarang_" + formData.memberId + "_" + savedWeek);
       adminAnalysisData = [];
       document.getElementById("inputSelfRespect").value = "";
       document.getElementById("inputWeeklyWriting").value = "";
