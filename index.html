@@ -517,11 +517,19 @@ async function renderInsight(d, containerId, isAdmin = false) {
   const sourceBadge = d.source && d.source !== "none" ? `<span class="source-badge ${srcClass[d.source] || 'keyword'}">${srcMap[d.source] || ""}</span>` : "";
   const flowHtml = `<div class="flow-hero"><div class="label">🌊 이번 주 흐름</div><div class="flow-text">${d.weekly_flow_summary || "이번 주 흐름이 아직 이어지지 않았어요."}</div></div>`;
   const emotions = safeArr(d.emotion_keywords).filter(Boolean);
-  const emotionHtml = emotions.length ? emotions.map(e => `<span class="tag">${e}</span>`).join("") : `<span class="tag ghost">기록을 기다리고 있어요</span>`;
+  const emotionHtml = emotions.length
+    ? emotions.map(e => `<span class="tag${d.emotion_is_default ? ' ghost' : ''}">${e}</span>`).join("")
+    : `<span class="tag ghost">기록을 기다리고 있어요</span>`;
   const selfcare = safeArr(d.selfcare_patterns).filter(Boolean);
-  const selfcareHtml = selfcare.length ? selfcare.map(s => `<span class="tag soft">${s}</span>`).join("") : `<span class="tag ghost">기록을 기다리고 있어요</span>`;
+  const selfcareHtml = selfcare.length
+    ? selfcare.map(s => `<span class="tag${d.selfcare_is_default ? ' ghost' : ' soft'}">${s}</span>`).join("")
+    : `<span class="tag ghost">기록을 기다리고 있어요</span>`;
   const talks = safeArr(d.self_talk_patterns).filter(Boolean);
-  const talkHtml = talks.length ? talks.map(t => `<div class="self-talk-item">" ${t} "</div>`).join("") : `<div class="self-talk-item" style="color:#bbb;font-style:normal;">기록을 기다리고 있어요</div>`;
+  const talkHtml = talks.length
+    ? talks.map(t => d.selftalk_is_default
+        ? `<div class="self-talk-item" style="color:#bbb;font-style:normal;">${t}</div>`
+        : `<div class="self-talk-item">" ${t} "</div>`).join("")
+    : `<div class="self-talk-item" style="color:#bbb;font-style:normal;">기록을 기다리고 있어요</div>`;
   const innerHtml = d.weekly_inner_patterns ? `<div class="inner-pattern-text">${d.weekly_inner_patterns}</div>` : `<div class="inner-pattern-text" style="color:#bbb;">주간 글쓰기 기록을 기다리고 있어요.</div>`;
   const bg = d.background || {};
   const initialHtml = (bg.reason || bg.status || bg.goal) ? `
@@ -619,17 +627,35 @@ async function doSaveAuth() {
   const sarangComment = document.getElementById("inputSarangComment").value.trim();
   const btn = document.getElementById("saveBtn"), result = document.getElementById("saveResult");
   btn.disabled = true; btn.textContent = "저장 중...";
+
+  // 사랑주니 코멘트는 날짜 + 멤버 + 코멘트만 있어도 단독 저장 가능
+  const canSaveComment = sarangComment && formData.date && formData.memberId;
+  const hasAuthRecord  = formData.selfRespect?.trim() || formData.weeklyWriting?.trim();
+
   try {
-    const res = await gasPost({ action: "saveAuth", formData });
-    result.textContent = res.message;
-    result.style.color = res.message.startsWith("✅") ? "var(--success)" : "var(--danger)";
-    if (res.message.startsWith("✅")) {
-      // 사랑주니 코멘트가 있으면 함께 저장
-      if (sarangComment) {
-        try {
-          await gasPost({ action: "saveSarangComment", name: formData.memberId, date: formData.date, comment: sarangComment });
-        } catch(e) { console.error("코멘트 저장 오류", e); }
-      }
+    let authSaved = false;
+    // 자기존중 기록이나 주간 글쓰기가 있으면 인증 저장
+    if (hasAuthRecord) {
+      const res = await gasPost({ action: "saveAuth", formData });
+      result.textContent = res.message;
+      result.style.color = res.message.startsWith("✅") ? "var(--success)" : "var(--danger)";
+      authSaved = res.message.startsWith("✅");
+    }
+
+    // 코멘트 단독 저장 (인증 성공 여부와 무관하게 저장)
+    if (canSaveComment) {
+      try {
+        await gasPost({ action: "saveSarangComment", name: formData.memberId, date: formData.date, comment: sarangComment });
+        if (!hasAuthRecord) {
+          result.textContent = "✅ 코멘트가 저장되었습니다.";
+          result.style.color = "var(--success)";
+          authSaved = true;
+        }
+      } catch(e) { console.error("코멘트 저장 오류", e); }
+    }
+
+    // 저장 성공 시 캐시 삭제 + 입력란 초기화
+    if (authSaved || canSaveComment) {
       const savedWeek = getWeekNumFromDate(formData.date);
       localStorage.removeItem(CACHE_PREFIX + formData.memberId + "_" + savedWeek);
       localStorage.removeItem(CACHE_PREFIX + "admin_all_" + savedWeek);
@@ -640,6 +666,11 @@ async function doSaveAuth() {
       document.getElementById("inputWeeklyWriting").value = "";
       document.getElementById("inputSarangComment").value = "";
       document.getElementById("inputMember").value = "";
+    }
+
+    if (!hasAuthRecord && !canSaveComment) {
+      result.textContent = "❌ 자기존중 기록, 주간 글쓰기, 또는 코멘트 중 하나는 입력해주세요.";
+      result.style.color = "var(--danger)";
     }
   } catch(e) { result.textContent = "❌ 저장 실패: " + e.message; result.style.color = "var(--danger)"; }
   finally { btn.disabled = false; btn.textContent = "저장하기"; }
